@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Children } from "react";
 import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,7 +19,7 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
     }
   }, []);
 
-  const content = String(children);
+  const content = Children.toArray(children).join('');
   const fullUrl = `${baseUrl}/tmdb${content}`;
   const isLink = content.startsWith("/");
 
