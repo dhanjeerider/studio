@@ -14,7 +14,9 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
   const [baseUrl, setBaseUrl] = useState("");
 
   useEffect(() => {
-    setBaseUrl(window.location.origin);
+    if (typeof window !== "undefined") {
+      setBaseUrl(window.location.origin);
+    }
   }, []);
 
   const fullUrl = `${baseUrl}/tmdb${children}`;
