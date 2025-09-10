@@ -5,7 +5,7 @@ import { Copy, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type CodeBlockProps = {
-  children: string;
+  children: React.ReactNode;
   className?: string;
 };
 
@@ -19,11 +19,12 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
     }
   }, []);
 
-  const fullUrl = `${baseUrl}/tmdb${children}`;
-  const isLink = children.startsWith("/");
+  const content = String(children);
+  const fullUrl = `${baseUrl}/tmdb${content}`;
+  const isLink = content.startsWith("/");
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(isLink ? fullUrl : children);
+    navigator.clipboard.writeText(isLink ? fullUrl : content);
     setHasCopied(true);
     setTimeout(() => setHasCopied(false), 2000);
   };
@@ -43,10 +44,10 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
           className="truncate text-foreground hover:underline"
           title={fullUrl}
         >
-          {children}
+          {content}
         </a>
       ) : (
-        <code className="truncate text-foreground">{children}</code>
+        <code className="truncate text-foreground">{content}</code>
       )}
       <button
         onClick={handleCopy}
