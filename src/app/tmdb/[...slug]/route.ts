@@ -2,14 +2,22 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
+// ✅ Proxy handler
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string[] } }
 ) {
-  const { slug } = params;
+  let { slug } = params;
   const { search, searchParams } = new URL(request.url);
+
+  // 🔹 Remove `tmdb` prefix from slug (example: /api/tmdb/movie/... -> /movie/...)
+  if (slug[0] === 'tmdb') {
+    slug = slug.slice(1);
+  }
+
   const tmdbPath = slug.join('/');
 
+  // ✅ Require API Key in query
   const apiKey = searchParams.get('api_key');
   if (!apiKey) {
     return NextResponse.json(
@@ -18,6 +26,7 @@ export async function GET(
     );
   }
 
+  // 🔹 Construct TMDB URL
   const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}`;
 
   try {
