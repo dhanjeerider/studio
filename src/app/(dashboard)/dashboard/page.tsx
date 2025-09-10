@@ -51,9 +51,19 @@ export default function DashboardPage() {
                 <CodeBlock>/api/tmdb/movie/609681</CodeBlock>
               </div>
               <div>
+                <h4 className="font-medium text-sm">Get All Movie Details (with append_to_response):</h4>
+                <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/movie/609681?append_to_response=...</code></p>
+                <CodeBlock>/api/tmdb/movie/609681?append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,release_dates,watch/providers</CodeBlock>
+              </div>
+              <div>
                 <h4 className="font-medium text-sm">Get TV Show Details:</h4>
                 <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/tv/66573</code></p>
                 <CodeBlock>/api/tmdb/tv/66573</CodeBlock>
+              </div>
+              <div>
+                <h4 className="font-medium text-sm">Get All TV Show Details (with append_to_response):</h4>
+                <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/tv/66573?append_to_response=...</code></p>
+                <CodeBlock>/api/tmdb/tv/66573?append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,content_ratings,watch/providers</CodeBlock>
               </div>
               <div>
                 <h4 className="font-medium text-sm">Discover Movies:</h4>
