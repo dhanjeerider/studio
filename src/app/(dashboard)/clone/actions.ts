@@ -2,7 +2,6 @@
 
 import { z } from 'zod';
 import { summarizeClonedData } from '@/ai/flows/summarize-cloned-data';
-import { mockMovieData, mockTvData } from '@/lib/mock-data';
 
 const CloneSchema = z.object({
   id: z.coerce.number().min(1, 'Please enter a valid ID.'),
@@ -32,26 +31,35 @@ export async function cloneAndSummarize(prevState: FormState, formData: FormData
   const { id, type } = validatedFields.data;
   
   try {
-    // In a real app, you'd fetch from TMDB API here
-    // await fetch(`https://api.themoviedb.org/3/${type}/${id}?append_to_response=...`)
-    const clonedData = type === 'movie' ? mockMovieData : mockTvData;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:9002';
+    const res = await fetch(`${baseUrl}/api/tmdb/${type}/${id}`);
+    
+    if (!res.ok) {
+        const errorData = await res.json();
+        console.error('TMDB API Error:', errorData);
+        return {
+            message: `Failed to clone data from TMDB: ${errorData.status_message || res.statusText}`,
+            data: null,
+            summary: null,
+        };
+    }
 
-    // Add the requested ID to the mock data for realism
-    const finalData = { ...clonedData, id };
+    const clonedData = await res.json();
 
     const summaryResult = await summarizeClonedData({
-      data: JSON.stringify(finalData),
+      data: JSON.stringify(clonedData),
     });
 
     return {
       message: 'Successfully cloned and summarized data.',
-      data: finalData,
+      data: clonedData,
       summary: summaryResult.summary,
     };
   } catch (error) {
     console.error(error);
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
     return {
-      message: 'An error occurred while cloning data.',
+      message: `An error occurred while cloning data: ${errorMessage}`,
       data: null,
       summary: null,
     };
