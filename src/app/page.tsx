@@ -30,23 +30,23 @@ export default function Home() {
               <h3 className="font-semibold">Movie Endpoints</h3>
                 <div>
                   <h4 className="font-medium text-sm">Get Movie Details:</h4>
-                  <CodeBlock>/api/tmdb/movie/609681?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/movie/609681?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Popular Movies:</h4>
-                  <CodeBlock>/api/tmdb/movie/popular?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/movie/popular?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Top Rated Movies:</h4>
-                  <CodeBlock>/api/tmdb/movie/top_rated?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/movie/top_rated?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Upcoming Movies:</h4>
-                  <CodeBlock>/api/tmdb/movie/upcoming?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/movie/upcoming?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Now Playing Movies:</h4>
-                  <CodeBlock>/api/tmdb/movie/now_playing?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/movie/now_playing?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
             </div>
 
@@ -54,23 +54,23 @@ export default function Home() {
               <h3 className="font-semibold">TV Show Endpoints</h3>
                 <div>
                   <h4 className="font-medium text-sm">Get TV Show Details:</h4>
-                  <CodeBlock>/api/tmdb/tv/66573?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/tv/66573?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Popular TV Shows:</h4>
-                  <CodeBlock>/api/tmdb/tv/popular?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/tv/popular?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">Top Rated TV Shows:</h4>
-                  <CodeBlock>/api/tmdb/tv/top_rated?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/tv/top_rated?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">On The Air TV Shows:</h4>
-                  <CodeBlock>/api/tmdb/tv/on_the_air?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/tv/on_the_air?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">Airing Today TV Shows:</h4>
-                  <CodeBlock>/api/tmdb/tv/airing_today?api_key=YOUR_API_KEY</CodeBlock>
+                  <CodeBlock>/tv/airing_today?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
             </div>
 
@@ -78,11 +78,11 @@ export default function Home() {
                 <h3 className="font-semibold">Discover Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Discover Movies:</h4>
-                    <CodeBlock>/api/tmdb/discover/movie?with_genres=28&amp;sort_by=popularity.desc&amp;api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/discover/movie?api_key=YOUR_API_KEY&amp;with_genres=28&amp;sort_by=popularity.desc</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Discover TV Shows:</h4>
-                    <CodeBlock>/api/tmdb/discover/tv?with_genres=35&amp;sort_by=first_air_date.desc&amp;api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/discover/tv?api_key=YOUR_API_KEY&amp;with_genres=35&amp;sort_by=first_air_date.desc</CodeBlock>
                 </div>
             </div>
 
@@ -90,11 +90,11 @@ export default function Home() {
                 <h3 className="font-semibold">Genre Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Movie Genres:</h4>
-                    <CodeBlock>/api/tmdb/genre/movie/list?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/genre/movie/list?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">TV Show Genres:</h4>
-                    <CodeBlock>/api/tmdb/genre/tv/list?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/genre/tv/list?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
             </div>
 
@@ -102,35 +102,50 @@ export default function Home() {
                 <h3 className="font-semibold">Person Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Person Details:</h4>
-                    <CodeBlock>/api/tmdb/person/287?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/person/287?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person Images:</h4>
-                    <CodeBlock>/api/tmdb/person/287/images?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/person/287/images?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person Movie Credits:</h4>
-                    <CodeBlock>/api/tmdb/person/287/movie_credits?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/person/287/movie_credits?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person TV Credits:</h4>
-                    <CodeBlock>/api/tmdb/person/287/tv_credits?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/person/287/tv_credits?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
             </div>
 
             <div className="space-y-4">
                 <h3 className="font-semibold">Trending Endpoints</h3>
                 <div>
+                    <h4 className="font-medium text-sm">Trending All (Daily):</h4>
+                    <CodeBlock>/trending/all/day?api_key=YOUR_API_KEY</CodeBlock>
+                </div>
+                <div>
                     <h4 className="font-medium text-sm">Trending Movies (Daily):</h4>
-                    <CodeBlock>/api/tmdb/trending/movie/day?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/trending/movie/day?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                  <div>
                     <h4 className="font-medium text-sm">Trending TV (Daily):</h4>
-                    <CodeBlock>/api/tmdb/trending/tv/day?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/trending/tv/day?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Trending People (Weekly):</h4>
-                    <CodeBlock>/api/tmdb/trending/person/week?api_key=YOUR_API_KEY</CodeBlock>
+                    <CodeBlock>/trending/person/week?api_key=YOUR_API_KEY</CodeBlock>
+                </div>
+            </div>
+             <div className="space-y-4">
+              <h3 className="font-semibold">Advanced Details</h3>
+                <div>
+                  <h4 className="font-medium text-sm">Get All Movie Details:</h4>
+                  <CodeBlock>/movie/609681?api_key=YOUR_API_KEY&amp;append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,release_dates,watch/providers</CodeBlock>
+                </div>
+                 <div>
+                  <h4 className="font-medium text-sm">Get All TV Show Details:</h4>
+                  <CodeBlock>/tv/66573?api_key=YOUR_API_KEY&amp;append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,content_ratings,watch/providers</CodeBlock>
                 </div>
             </div>
           </div>
