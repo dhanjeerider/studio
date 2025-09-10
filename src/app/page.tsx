@@ -1,6 +1,6 @@
 import { CodeBlock } from "@/components/code-block";
 
-const apiKey = "69e7749cdabc8c4b4b06a8bd2b6e8655";
+const apiKey = "e2f36edd5828037f897c065caca5156f";
 
 export default function Home() {
   return (
@@ -32,23 +32,23 @@ export default function Home() {
               <h3 className="font-semibold">Movie Endpoints</h3>
                 <div>
                   <h4 className="font-medium text-sm">Get Movie Details:</h4>
-                  <CodeBlock>/movie/609681?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/movie/609681?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Popular Movies:</h4>
-                  <CodeBlock>/movie/popular?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/movie/popular?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Top Rated Movies:</h4>
-                  <CodeBlock>/movie/top_rated?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/movie/top_rated?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Upcoming Movies:</h4>
-                  <CodeBlock>/movie/upcoming?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/movie/upcoming?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Now Playing Movies:</h4>
-                  <CodeBlock>/movie/now_playing?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/movie/now_playing?api_key=${apiKey}`}</CodeBlock>
                 </div>
             </div>
 
@@ -56,23 +56,23 @@ export default function Home() {
               <h3 className="font-semibold">TV Show Endpoints</h3>
                 <div>
                   <h4 className="font-medium text-sm">Get TV Show Details:</h4>
-                  <CodeBlock>/tv/66573?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/tv/66573?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                   <h4 className="font-medium text-sm">Popular TV Shows:</h4>
-                  <CodeBlock>/tv/popular?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/tv/popular?api_key=${apiKey}`}</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">Top Rated TV Shows:</h4>
-                  <CodeBlock>/tv/top_rated?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/tv/top_rated?api_key=${apiKey}`}</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">On The Air TV Shows:</h4>
-                  <CodeBlock>/tv/on_the_air?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/tv/on_the_air?api_key=${apiKey}`}</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">Airing Today TV Shows:</h4>
-                  <CodeBlock>/tv/airing_today?api_key={apiKey}</CodeBlock>
+                  <CodeBlock>{`/tv/airing_today?api_key=${apiKey}`}</CodeBlock>
                 </div>
             </div>
 
@@ -80,11 +80,11 @@ export default function Home() {
                 <h3 className="font-semibold">Discover Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Discover Movies:</h4>
-                    <CodeBlock>/discover/movie?api_key={apiKey}&with_genres=28&sort_by=popularity.desc</CodeBlock>
+                    <CodeBlock>{`/discover/movie?api_key=${apiKey}&with_genres=28&sort_by=popularity.desc`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Discover TV Shows:</h4>
-                    <CodeBlock>/discover/tv?api_key={apiKey}&with_genres=35&sort_by=first_air_date.desc</CodeBlock>
+                    <CodeBlock>{`/discover/tv?api_key=${apiKey}&with_genres=35&sort_by=first_air_date.desc`}</CodeBlock>
                 </div>
             </div>
 
@@ -92,11 +92,11 @@ export default function Home() {
                 <h3 className="font-semibold">Genre Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Movie Genres:</h4>
-                    <CodeBlock>/genre/movie/list?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/genre/movie/list?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">TV Show Genres:</h4>
-                    <CodeBlock>/genre/tv/list?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/genre/tv/list?api_key=${apiKey}`}</CodeBlock>
                 </div>
             </div>
 
@@ -104,19 +104,19 @@ export default function Home() {
                 <h3 className="font-semibold">Person Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Person Details:</h4>
-                    <CodeBlock>/person/287?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/person/287?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person Images:</h4>
-                    <CodeBlock>/person/287/images?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/person/287/images?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person Movie Credits:</h4>
-                    <CodeBlock>/person/287/movie_credits?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/person/287/movie_credits?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Person TV Credits:</h4>
-                    <CodeBlock>/person/287/tv_credits?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/person/287/tv_credits?api_key=${apiKey}`}</CodeBlock>
                 </div>
             </div>
 
@@ -124,30 +124,30 @@ export default function Home() {
                 <h3 className="font-semibold">Trending Endpoints</h3>
                 <div>
                     <h4 className="font-medium text-sm">Trending All (Daily):</h4>
-                    <CodeBlock>/trending/all/day?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/trending/all/day?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Trending Movies (Daily):</h4>
-                    <CodeBlock>/trending/movie/day?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/trending/movie/day?api_key=${apiKey}`}</CodeBlock>
                 </div>
                  <div>
                     <h4 className="font-medium text-sm">Trending TV (Daily):</h4>
-                    <CodeBlock>/trending/tv/day?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/trending/tv/day?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Trending People (Weekly):</h4>
-                    <CodeBlock>/trending/person/week?api_key={apiKey}</CodeBlock>
+                    <CodeBlock>{`/trending/person/week?api_key=${apiKey}`}</CodeBlock>
                 </div>
             </div>
              <div className="space-y-4">
               <h3 className="font-semibold">Advanced Details</h3>
                 <div>
                   <h4 className="font-medium text-sm">Get All Movie Details:</h4>
-                  <CodeBlock>/movie/609681?api_key={apiKey}&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,release_dates,watch/providers</CodeBlock>
+                  <CodeBlock>{`/movie/609681?api_key=${apiKey}&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,release_dates,watch/providers`}</CodeBlock>
                 </div>
                  <div>
                   <h4 className="font-medium text-sm">Get All TV Show Details:</h4>
-                  <CodeBlock>/tv/66573?api_key={apiKey}&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,content_ratings,watch/providers</CodeBlock>
+                  <CodeBlock>{`/tv/66573?api_key=${apiKey}&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,content_ratings,watch/providers`}</CodeBlock>
                 </div>
             </div>
           </div>
