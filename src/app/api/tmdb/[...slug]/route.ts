@@ -6,25 +6,26 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string[] } }
 ) {
-  const tmdbApiKey = process.env.TMDB_API_KEY;
 
-  if (!tmdbApiKey) {
+  const { slug } = params;
+  const { search, searchParams } = new URL(request.url);
+  const tmdbPath = slug.join('/');
+
+  const apiKey = searchParams.get('api_key');
+  if (!apiKey) {
     return NextResponse.json(
-      { error: 'TMDB_API_KEY is not configured in environment variables.' },
-      { status: 500 }
+      { error: 'api_key query parameter is required.' },
+      { status: 400 }
     );
   }
 
-  const { slug } = params;
-  const { search } = new URL(request.url);
-  const tmdbPath = slug.join('/');
-  
   const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}`;
 
   try {
+    // TMDB API v3 supports API key via query string or Authorization header.
+    // Since the user is providing it in the query string, we just pass it through.
     const tmdbResponse = await fetch(tmdbUrl, {
       headers: {
-        'Authorization': `Bearer ${tmdbApiKey}`,
         'Content-Type': 'application/json',
       },
     });
