@@ -21,8 +21,6 @@ export async function GET(
   const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}`;
 
   try {
-    // TMDB API v3 supports API key via query string or Authorization header.
-    // Since the user is providing it in the query string, we just pass it through.
     const tmdbResponse = await fetch(tmdbUrl, {
       headers: {
         'Content-Type': 'application/json',
