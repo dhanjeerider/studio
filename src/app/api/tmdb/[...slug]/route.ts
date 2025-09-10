@@ -7,12 +7,8 @@ export async function GET(
   { params }: { params: { slug: string[] } }
 ) {
   const { slug } = params;
-  const { search, searchParams, pathname } = new URL(request.url);
+  const { search, searchParams } = new URL(request.url);
   const tmdbPath = slug.join('/');
-
-  // Log the request for analytics
-  const referer = request.headers.get('referer');
-  console.log(`TMDB_PROXY_REQUEST: Path='${tmdbPath}', Referer='${referer || 'Not available'}'`);
 
   const apiKey = searchParams.get('api_key');
   if (!apiKey) {
