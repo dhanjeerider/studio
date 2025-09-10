@@ -1,10 +1,3 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { CodeBlock } from "@/components/code-block";
 
 export default function Home() {
@@ -17,14 +10,14 @@ export default function Home() {
             A simple, open-source reverse proxy for The Movie Database API.
           </p>
         </div>
-        <Card>
-          <CardHeader>
-            <CardTitle>API Documentation</CardTitle>
-            <CardDescription>
-              Use your application's URL as a proxy to the TMDB API. You must include your TMDB API key as a query parameter in each request.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
+        <div className="space-y-6 rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+            <div className="space-y-2">
+              <h3 className="font-semibold text-2xl">API Documentation</h3>
+              <p className="text-sm text-muted-foreground">
+                Use this application's URL as a proxy to the TMDB API. You must include your TMDB API key as a query parameter in each request.
+              </p>
+            </div>
+
             <div className="space-y-2">
               <h3 className="font-semibold">Base Proxy URL</h3>
               <p className="text-sm text-muted-foreground">
@@ -33,15 +26,11 @@ export default function Home() {
               <CodeBlock>/api/tmdb</CodeBlock>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-4">
               <h3 className="font-semibold">Examples</h3>
-              <p className="text-sm text-muted-foreground">
-                Simply replace <code>https://api.themoviedb.org/3</code> with your application's URL followed by <code>/api/tmdb</code>, and add your API key.
-              </p>
-              <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-sm">Get Movie Details:</h4>
-                  <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/movie/609681?api_key=...</code></p>
+                  <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: code/movie/609681?api_key=...</p>
                   <CodeBlock>/api/tmdb/movie/609681?api_key=YOUR_API_KEY</CodeBlock>
                 </div>
                 <div>
@@ -54,10 +43,18 @@ export default function Home() {
                   <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/search/movie?query=Inception&api_key=...</code></p>
                   <CodeBlock>/api/tmdb/search/movie?query=Inception&api_key=YOUR_API_KEY</CodeBlock>
                 </div>
-              </div>
+                <div>
+                  <h4 className="font-medium text-sm">Advanced Movie Details:</h4>
+                  <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: <code>/movie/609681?append_to_response=...&api_key=...</code></p>
+                  <CodeBlock>/api/tmdb/movie/609681?api_key=YOUR_API_KEY&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,release_dates,watch/providers</CodeBlock>
+                </div>
+                 <div>
+                  <h4 className="font-medium text-sm">Advanced TV Details:</h4>
+                  <p className="text-xs text-muted-foreground mb-1">Original TMDB Path: T<code>/tv/66573?append_to_response=...&api_key=...</code></p>
+                  <CodeBlock>/api/tmdb/tv/66573?api_key=YOUR_API_KEY&append_to_response=credits,images,videos,keywords,reviews,recommendations,similar,content_ratings,watch/providers</CodeBlock>
+                </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
       </div>
     </main>
   );
