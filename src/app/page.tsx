@@ -25,7 +25,7 @@ export default function Home() {
               <p className="text-sm text-muted-foreground">
                 All TMDB API requests should be prefixed with this path.
               </p>
-              <CodeBlock>/tmdb</CodeBlock>
+              <CodeBlock>/</CodeBlock>
             </div>
 
             <div className="space-y-4">

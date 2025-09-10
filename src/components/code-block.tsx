@@ -20,7 +20,7 @@ export function CodeBlock({ children, className }: CodeBlockProps) {
   }, []);
 
   const content = Children.toArray(children).join('');
-  const fullUrl = `${baseUrl}/tmdb${content}`;
+  const fullUrl = `${baseUrl}${content}`;
   const isLink = content.startsWith("/");
 
   const handleCopy = () => {

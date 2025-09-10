@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/:path((movie|tv|discover|genre|person|trending)(.*))',
+        destination: '/tmdb/:path*',
+      },
+    ];
+  },
 };
 
 export default nextConfig;
