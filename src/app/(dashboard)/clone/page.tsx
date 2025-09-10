@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Terminal } from 'lucide-react';
 
@@ -67,11 +66,11 @@ export default function ManualClonePage() {
       </Card>
 
       <div className="space-y-6">
-        {state.summary && (
-          <Alert>
+        {state.message && state.message.startsWith('Failed') && (
+          <Alert variant="destructive">
             <Terminal className="h-4 w-4" />
-            <AlertTitle>AI Summary</AlertTitle>
-            <AlertDescription>{state.summary}</AlertDescription>
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{state.message}</AlertDescription>
           </Alert>
         )}
         
@@ -80,7 +79,7 @@ export default function ManualClonePage() {
             <CardHeader>
               <CardTitle>Cloned JSON Data</CardTitle>
               <CardDescription>
-                Raw JSON response from the simulated API call.
+                Raw JSON response from the proxied API call.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-grow overflow-auto">

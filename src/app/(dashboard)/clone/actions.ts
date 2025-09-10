@@ -1,7 +1,6 @@
 'use server';
 
 import { z } from 'zod';
-import { summarizeClonedData } from '@/ai/flows/summarize-cloned-data';
 
 const CloneSchema = z.object({
   id: z.coerce.number().min(1, 'Please enter a valid ID.'),
@@ -46,14 +45,10 @@ export async function cloneAndSummarize(prevState: FormState, formData: FormData
 
     const clonedData = await res.json();
 
-    const summaryResult = await summarizeClonedData({
-      data: JSON.stringify(clonedData),
-    });
-
     return {
       message: 'Successfully cloned and summarized data.',
       data: clonedData,
-      summary: summaryResult.summary,
+      summary: "The AI summary feature has been removed.",
     };
   } catch (error) {
     console.error(error);
