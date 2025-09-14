@@ -7,9 +7,9 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-6 md:p-24">
       <div className="w-full max-w-4xl space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Indie TMDB Proxy</h1>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Indian TMDB Proxy</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            A simple, open-source reverse proxy for The Movie Database API.
+            A simple, open-source reverse proxy for The Movie Database API. which helps to load TMDB api in India 🙂‍↔️ jio isp blocking bypass and fast loading cdn json response <br /> made by <a href="https://t.me/+_lJ14CGAOgkxNGM9"><b>DHANJEE RIDER </b></a>in 1 sep 2025 
           </p>
         </div>
         <div className="space-y-6 rounded-lg border bg-card text-card-foreground shadow-sm p-6">
@@ -23,7 +23,7 @@ export default function Home() {
             <div className="space-y-2">
               <h3 className="font-semibold">Base Proxy URL</h3>
               <p className="text-sm text-muted-foreground">
-                All TMDB API requests should be prefixed with this path.
+                All TMDB API requests should be prefixed with this path. if you have a tMDB streming script then serch for tmdb js and add this as base url to load your website in India 🙂‍↔️ 
               </p>
               <CodeBlock>https://dktczn.vercel.app/tmdb</CodeBlock>
             </div>
