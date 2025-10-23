@@ -9,7 +9,7 @@ export default function Home() {
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">Indian TMDB Proxy</h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            A simple, open-source reverse proxy for The Movie Database API. which helps to load TMDB api in India. jio isp blocking bypass and fast loading cdn json response <br /> made by <a href="https://t.me/+_lJ14CGAOgkxNGM9"><b>DHANJEE RIDER </b></a>in 1 sep 2025
+            A simple, open-source reverse proxy for The Movie Database API. which helps to load TMDB api in India 🙂‍↔️ jio isp blocking bypass and fast loading cdn json response <br /> made by <a href="https://t.me/+_lJ14CGAOgkxNGM9"><b>DHANJEE RIDER </b></a>in 1 sep 2025 
           </p>
         </div>
         <div className="space-y-6 rounded-lg border bg-card text-card-foreground shadow-sm p-6">
@@ -23,9 +23,9 @@ export default function Home() {
             <div className="space-y-2">
               <h3 className="font-semibold">Base Proxy URL</h3>
               <p className="text-sm text-muted-foreground">
-                All TMDB API requests should be prefixed with this path. if you have a tMDB streming script then serch for tmdb js and add this as base url to load your website in India.
+                All TMDB API requests should be prefixed with this path. if you have a tMDB streming script then serch for tmdb js and add this as base url to load your website in India 🙂‍↔️ 
               </p>
-              <CodeBlock>YOUR_CLOUDFLARE_PAGES_URL/tmdb</CodeBlock>
+              <CodeBlock>https://dktczn.vercel.app/tmdb</CodeBlock>
             </div>
 
             <div className="space-y-4">
@@ -131,8 +131,8 @@ export default function Home() {
                     <CodeBlock>{`/tmdb/trending/movie/day?api_key=${apiKey}`}</CodeBlock>
                 </div>
                  <div>
-                  <h4 className="font-medium text-sm">Trending TV (Daily):</h4>
-                  <CodeBlock>{`/tmdb/trending/tv/day?api_key=${apiKey}`}</CodeBlock>
+                    <h4 className="font-medium text-sm">Trending TV (Daily):</h4>
+                    <CodeBlock>{`/tmdb/trending/tv/day?api_key=${apiKey}`}</CodeBlock>
                 </div>
                 <div>
                     <h4 className="font-medium text-sm">Trending People (Weekly):</h4>
@@ -154,4 +154,4 @@ export default function Home() {
       </div>
     </main>
   );
-}
+} 
