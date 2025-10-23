@@ -30,6 +30,6 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5",
     "vercel": "37.0.0",
-    "wrangler": "^3.96.0"
+    "wrangler": "^4.0.0"
   }
 }
