@@ -1,25 +1,20 @@
 import { NextResponse, type NextRequest } from "next/server";
 export const runtime = 'edge';
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const TMDB_API_KEY = "7bffed716d50c95ed1c4790cfab4866a"; // Hardcoded API key
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string[] } }
 ) {
   const { slug } = params;
-  const { search, searchParams } = new URL(request.url);
+  const { search } = new URL(request.url);
 
   const tmdbPath = slug.join("/");
 
-  const apiKey = searchParams.get("api_key");
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "api_key query parameter is required." },
-      { status: 400 }
-    );
-  }
-
-  const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}`;
+  // Append the API key automatically
+  const separator = search ? "&" : "?";
+  const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}${separator}api_key=${TMDB_API_KEY}`;
 
   try {
     const tmdbResponse = await fetch(tmdbUrl, {
