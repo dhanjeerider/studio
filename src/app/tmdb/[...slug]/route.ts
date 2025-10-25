@@ -8,13 +8,18 @@ export async function GET(
   { params }: { params: { slug: string[] } }
 ) {
   const { slug } = params;
-  const { search } = new URL(request.url);
+  const url = new URL(request.url);
+  
+  // Remove api_key from incoming params to avoid duplicates
+  const searchParams = new URLSearchParams(url.search);
+  searchParams.delete('api_key');
+  const search = searchParams.toString();
 
   const tmdbPath = slug.join("/");
 
   // Append the API key automatically
   const separator = search ? "&" : "?";
-  const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search}${separator}api_key=${TMDB_API_KEY}`;
+  const tmdbUrl = `${TMDB_BASE_URL}/${tmdbPath}${search ? '?' + search : ''}${separator}api_key=${TMDB_API_KEY}`;
 
   try {
     const tmdbResponse = await fetch(tmdbUrl, {
