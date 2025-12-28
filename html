@@ -169,16 +169,29 @@
 
       try {
         currentPage++;
-        // Logic for Category vs Home pagination
-        const nextUrl = `${currentBaseUrl}/movies/page${currentPage}/`;
+        // Determine if currentBaseUrl is a category or archive
+        let nextUrl;
+        if (/\/category\//.test(currentBaseUrl)) {
+          // Category pagination: /category/xyz/page/2
+          nextUrl = `${cleanSlash(currentBaseUrl)}/page/${currentPage}/`;
+        } else if (/\/movies$/.test(cleanSlash(currentBaseUrl))) {
+          // Archive pagination: /movies/page/2
+          nextUrl = `${cleanSlash(currentBaseUrl)}/page/${currentPage}/`;
+        } else {
+          // Home or other: fallback to /movies/page/2
+          nextUrl = `${BASE_URL}movies/page/${currentPage}/`;
+        }
         console.log("Next URL:", nextUrl);
 
         const html = await fetchHtml(nextUrl);
         const newPosts = parsePosts(html);
 
-        if (newPosts.length > 0) {
-          allPosts = [...allPosts, ...newPosts];
-          renderGrid(newPosts, true);
+        // Prevent duplicate posts
+        const uniqueNewPosts = newPosts.filter(np => !allPosts.some(ap => ap.url === np.url));
+
+        if (uniqueNewPosts.length > 0) {
+          allPosts = [...allPosts, ...uniqueNewPosts];
+          renderGrid(uniqueNewPosts, true);
           btnText.textContent = 'Load More';
         } else {
           btnText.textContent = 'No More Content';
