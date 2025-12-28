@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MovieRulz - Green Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { --primary: #10b981; --dark: #020617; }
+    .gradient-text { background: linear-gradient(135deg, #34d399 0%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .gradient-btn { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+    .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2); }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 50; display: none; overflow-y: auto; }
+    .modal-overlay.active { display: flex; flex-direction: column; }
+    
+    /* Menu Styling */
+    #primary-menu { display: flex; gap: 15px; list-style: none; padding: 10px; overflow-x: auto; font-size: 13px; border-bottom: 1px solid #1e293b; }
+    #primary-menu li { position: relative; }
+    #primary-menu a { cursor: pointer; white-space: nowrap; color: #94a3b8; font-weight: 600; padding: 5px 10px; border-radius: 5px; transition: all 0.2s; }
+    #primary-menu a:hover { color: #10b981; background: #064e3b33; }
+    .sub-menu { display: none; position: absolute; top: 100%; left: 0; background: #0f172a; border: 1px solid #1e293b; border-radius: 8px; z-index: 100; min-width: 180px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    #primary-menu li:hover .sub-menu { display: block; }
+    .sub-menu li a { display: block; padding: 8px 15px; border-bottom: 1px solid #1e293b; }
+
+    #postContentArea a { color: #34d399; text-decoration: none; font-weight: bold; }
+    #postContentArea img { max-width: 100%; height: auto; border-radius: 8px; margin: 10px 0; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
+  
+  <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-2xl font-extrabold gradient-text tracking-tight cursor-pointer" onclick="loadCategory(BASE_URL)">🎬 MovieRulz</h1>
+      <div class="flex items-center gap-3">
+        <input type="text" id="searchInput" placeholder="Search..." class="hidden sm:block bg-slate-800 text-slate-100 px-4 py-2 rounded-full border border-slate-700 focus:border-emerald-500 focus:outline-none w-48 text-sm" />
+        <button id="homeBtn" class="px-4 py-2 gradient-btn text-white rounded-full text-xs font-bold uppercase tracking-wider">Home</button>
+      </div>
+    </div>
+    
+    <nav id="menu" class="max-w-7xl mx-auto no-scrollbar overflow-x-auto">
+      <ul id="primary-menu" class="menu">
+        <li><a data-url="https://www.5movierulz.hockey">Home</a></li>
+        <li><a data-url="https://www.5movierulz.hockey/movies">Featured</a>
+          <ul class="sub-menu">
+            <li><a data-url="https://www.5movierulz.hockey/category/hollywood-featured">Hollywood</a></li>
+            <li><a data-url="https://www.5movierulz.hockey/category/bollywood-featured">Bollywood</a></li>
+            <li><a data-url="https://www.5movierulz.hockey/category/telugu-featured">Telugu</a></li>
+          </ul>
+        </li>
+        <li><a data-url="https://www.5movierulz.hockey/category/telugu-movies-2025">Telugu 2025</a></li>
+        <li><a data-url="https://www.5movierulz.hockey/category/hindi-movies-2025">Hindi 2025</a></li>
+        <li><a data-url="https://www.5movierulz.hockey/language/hindi-dubbed">Dubbed</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8 min-h-screen">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold text-white border-l-4 border-emerald-500 pl-3">Content Grid</h3>
+      <div class="text-xs font-mono text-emerald-400 bg-emerald-900/20 px-2 py-1 rounded border border-emerald-900/50" id="status">Ready</div>
+    </div>
+    <div id="grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6"></div>
+    
+    <div class="mt-12 text-center">
+      <button id="loadMoreBtn" class="hidden px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-full font-bold border border-slate-700 transition">
+        <span id="loadMoreText">Load More</span>
+      </button>
+    </div>
+  </main>
+
+  <div id="postModal" class="modal-overlay z-50">
+    <div class="flex-1 max-w-5xl w-full mx-auto bg-slate-900 min-h-screen sm:rounded-xl overflow-hidden shadow-2xl relative border border-slate-800">
+      <div class="sticky top-0 bg-slate-900/95 p-4 border-b border-slate-800 flex justify-between items-center z-10">
+        <h2 id="postTitle" class="text-lg font-bold text-white truncate mr-4">Movie Details</h2>
+        <button onclick="closeModal('postModal')" class="text-2xl text-slate-400 hover:text-white">&times;</button>
+      </div>
+      <div class="p-4 sm:p-8" id="postContentArea"></div>
+    </div>
+  </div>
+
+  <div id="playerModal" class="modal-overlay z-[60] bg-black">
+    <div class="flex flex-col h-full w-full">
+      <div class="bg-slate-900 p-3 flex justify-between items-center"><span class="text-emerald-400">Streaming Source</span><button onclick="closeModal('playerModal')" class="bg-red-600 px-3 py-1 rounded text-xs font-bold">CLOSE</button></div>
+      <iframe id="videoFrame" class="flex-1 w-full h-full" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    const WORKER_API = 'https://restless-glitter-f6c4.dktczn.workers.dev/?url=';
+    const BASE_URL = 'https://www.5movierulz.hockey/';
+    
+    let allPosts = [];
+    let currentBaseUrl = BASE_URL; 
+    let currentPage = 1;
+    let isLoading = false;
+
+    function cleanSlash(url) {
+        return url.replace(/\/+$/, '');
+    }
+
+    async function fetchHtml(url) {
+        try {
+            const res = await fetch(WORKER_API + encodeURIComponent(url));
+            const json = await res.json();
+            return json.html || '';
+        } catch (e) { return ''; }
+    }
+
+    function parsePosts(html) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return Array.from(doc.querySelectorAll('div.boxed.film')).map(node => {
+        const a = node.querySelector('a');
+        const img = node.querySelector('img');
+        if (!a || !img) return null;
+        return { title: node.querySelector('p b')?.textContent || 'Movie', url: a.href, image: img.src };
+      }).filter(Boolean);
+    }
+
+    function renderGrid(posts, append = false) {
+      const grid = document.getElementById('grid');
+      const html = posts.map((post, index) => {
+        const globalIndex = append ? (allPosts.length - posts.length + index) : index;
+        return `
+        <article onclick="openPost(${globalIndex})" class="hover-lift cursor-pointer bg-slate-900 rounded-lg overflow-hidden border border-slate-800 group">
+          <div class="aspect-[2/3] overflow-hidden relative">
+            <img src="${post.image}" class="w-full h-full object-cover opacity-90 group-hover:opacity-100" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+          </div>
+          <div class="p-3"><h3 class="text-xs font-semibold line-clamp-2">${post.title}</h3></div>
+        </article>`;
+      }).join('');
+      if (append) grid.innerHTML += html; else grid.innerHTML = html;
+    }
+
+    // --- UPDATED LOAD CATEGORY ---
+    async function loadCategory(url) {
+      if (!url || url === '#') return;
+      isLoading = true;
+      currentPage = 1;
+      allPosts = [];
+      
+      // Setup URL correctly
+      currentBaseUrl = cleanSlash(url.split('/category/page')[0]);
+      
+      document.getElementById('grid').innerHTML = '<div class="col-span-full py-20 text-center animate-pulse">Loading items...</div>';
+      document.getElementById('loadMoreBtn').classList.add('hidden');
+
+      try {
+        const html = await fetchHtml(currentBaseUrl + '/');
+        const posts = parsePosts(html);
+        allPosts = posts;
+        renderGrid(posts);
+        
+        document.getElementById('status').textContent = `${posts.length} Items Found`;
+        if(posts.length >= 10) document.getElementById('loadMoreBtn').classList.remove('hidden');
+      } catch (e) {
+        document.getElementById('grid').innerHTML = '<div class="col-span-full text-center">Failed to load content.</div>';
+      } finally { isLoading = false; }
+    }
+
+    // --- UPDATED LOAD MORE ---
+    async function loadMore() {
+      if (isLoading) return;
+      isLoading = true;
+      const btnText = document.getElementById('loadMoreText');
+      btnText.textContent = 'Loading...';
+
+      try {
+        currentPage++;
+        // Logic for Category vs Home pagination
+        const nextUrl = `${currentBaseUrl}/movies/page${currentPage}/`;
+        console.log("Next URL:", nextUrl);
+
+        const html = await fetchHtml(nextUrl);
+        const newPosts = parsePosts(html);
+
+        if (newPosts.length > 0) {
+          allPosts = [...allPosts, ...newPosts];
+          renderGrid(newPosts, true);
+          btnText.textContent = 'Load More';
+        } else {
+          btnText.textContent = 'No More Content';
+          setTimeout(() => document.getElementById('loadMoreBtn').classList.add('hidden'), 2000);
+        }
+      } catch (e) {
+        btnText.textContent = 'Error! Try Again';
+      } finally { isLoading = false; }
+    }
+
+    // --- ACTIVATE ALL MENU LINKS ---
+    function initMenu() {
+        const menuLinks = document.querySelectorAll('#primary-menu a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const targetUrl = link.getAttribute('data-url');
+                if (targetUrl && targetUrl !== '#') {
+                    e.preventDefault();
+                    loadCategory(targetUrl);
+                }
+            });
+        });
+    }
+
+    async function openPost(index) {
+      const post = allPosts[index];
+      const modal = document.getElementById('postModal');
+      const content = document.getElementById('postContentArea');
+      document.getElementById('postTitle').textContent = post.title;
+      modal.classList.add('active');
+      content.innerHTML = 'Loading Details...';
+
+      const html = await fetchHtml(post.url);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const entry = doc.querySelector('.entry-content') || doc.querySelector('article');
+      
+      if (entry) {
+        content.innerHTML = entry.innerHTML;
+        content.querySelectorAll('a').forEach(link => {
+            const href = link.href;
+            if (href.includes('5movierulz')) {
+                link.onclick = (e) => { e.preventDefault(); closeModal('postModal'); loadCategory(href); };
+            } else {
+                link.onclick = (e) => { e.preventDefault(); openPlayer(href); };
+                link.className = 'block bg-emerald-700 text-white p-2 rounded my-2 text-center font-bold';
+            }
+        });
+      }
+    }
+
+    function openPlayer(url) {
+        document.getElementById('videoFrame').src = url;
+        document.getElementById('playerModal').classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+      if (id === 'playerModal') document.getElementById('videoFrame').src = '';
+    }
+
+    document.getElementById('loadMoreBtn').addEventListener('click', loadMore);
+    document.getElementById('homeBtn').addEventListener('click', () => loadCategory(BASE_URL));
+
+    window.onload = () => {
+        initMenu();
+        loadCategory(BASE_URL);
+    };
+  </script>
+</body>
+</html>
