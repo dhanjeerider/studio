@@ -1066,8 +1066,9 @@ body.dark-mode .icon-moon { display: block; }
 .sm-nav-legal .sm-nav-item { font-size: 0.82rem; font-weight: 500; color: var(--gray); }
 
 /* ── Reveal Animations ── */
-.pas-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.55s ease, transform 0.55s ease; }
-.pas-reveal.pas-visible { opacity: 1; transform: translateY(0); }
+.pas-reveal { transition: opacity 0.55s ease, transform 0.55s ease; }
+.js .pas-reveal { opacity: 0; transform: translateY(24px); }
+.js .pas-reveal.pas-visible { opacity: 1; transform: translateY(0); }
 .pas-delay-1 { transition-delay: 0.1s; }
 .pas-delay-2 { transition-delay: 0.2s; }
 .pas-delay-3 { transition-delay: 0.3s; }

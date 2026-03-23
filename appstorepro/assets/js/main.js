@@ -6,6 +6,10 @@
   document.addEventListener('DOMContentLoaded', init);
 
   function init() {
+    if (window._pasRevealFailsafe) {
+      clearTimeout(window._pasRevealFailsafe);
+      window._pasRevealFailsafe = null;
+    }
     initThemeRestore();
     initScrollBar();
     initDarkMode();
@@ -171,6 +175,17 @@
     var canvas = document.getElementById('pas-particles');
     if (!canvas) return;
     var ctx = canvas.getContext('2d');
+
+    function createParticle() {
+      return {
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        dx: (Math.random() - 0.5) * 0.8,
+        dy: (Math.random() - 0.5) * 0.8,
+        r: Math.random() * 2 + 1,
+        alpha: Math.random() * 0.25 + 0.05
+      };
+    }
 
     var savedPart = localStorage.getItem('pas_particles');
     if (savedPart === 'off') {
