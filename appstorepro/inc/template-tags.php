@@ -21,6 +21,19 @@ function appstorepro_get_app_rating_stars( $rating ) {
 	return $output;
 }
 
+// appstorepro_allowed_svg_kses
+function appstorepro_allowed_svg_kses() {
+	return [
+		'svg'     => [ 'viewbox' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true, 'width' => true, 'height' => true, 'xmlns' => true, 'aria-hidden' => true ],
+		'path'    => [ 'd' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true ],
+		'circle'  => [ 'cx' => true, 'cy' => true, 'r' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ],
+		'line'    => [ 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true ],
+		'polyline'=> [ 'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true, 'stroke-linecap' => true, 'stroke-linejoin' => true ],
+		'polygon' => [ 'points' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ],
+		'rect'    => [ 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true, 'fill' => true, 'stroke' => true, 'stroke-width' => true ],
+	];
+}
+
 // appstorepro_get_category_icon_svg
 function appstorepro_get_category_icon_svg( $slug ) {
 	$icons = [

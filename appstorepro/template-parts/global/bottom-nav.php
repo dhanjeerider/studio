@@ -1,6 +1,5 @@
 <?php
 // template-parts/global/bottom-nav.php
-$current_url = home_url( $_SERVER['REQUEST_URI'] );
 ?>
 <nav class="bottom-nav" id="bottom-nav" aria-label="<?php esc_attr_e( 'Main mobile navigation', 'appstorepro' ); ?>">
 	<a href="<?= esc_url( home_url( '/' ) ); ?>" class="nav-item" data-nav="home">

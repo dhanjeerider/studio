@@ -1,6 +1,6 @@
 <?php
 // template-parts/global/footer-content.php
-$footer_text     = get_theme_mod( 'appstorepro_footer_text', '&copy; ' . date( 'Y' ) . ' AppStore Pro. All rights reserved.' );
+$footer_text     = get_theme_mod( 'appstorepro_footer_text', '&copy; ' . gmdate( 'Y' ) . ' AppStore Pro. All rights reserved.' );
 $telegram_url    = get_theme_mod( 'appstorepro_social_telegram', '' );
 $youtube_url     = get_theme_mod( 'appstorepro_social_youtube', '' );
 $tg_members      = get_theme_mod( 'appstorepro_footer_telegram_members', '' );

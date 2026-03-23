@@ -77,7 +77,7 @@ function appstorepro_customize_register( $wp_customize ) {
 		'title' => __( 'Footer Settings', 'appstorepro' ),
 		'panel' => 'appstorepro_theme_settings',
 	] );
-	$wp_customize->add_setting( 'appstorepro_footer_text', [ 'default' => '© ' . date( 'Y' ) . ' AppStore Pro. All rights reserved.', 'sanitize_callback' => 'wp_kses_post' ] );
+	$wp_customize->add_setting( 'appstorepro_footer_text', [ 'default' => '© ' . gmdate( 'Y' ) . ' AppStore Pro. All rights reserved.', 'sanitize_callback' => 'wp_kses_post' ] );
 	$wp_customize->add_control( 'appstorepro_footer_text', [
 		'label'   => __( 'Footer Text', 'appstorepro' ),
 		'section' => 'appstorepro_footer',
