@@ -54,7 +54,7 @@ function appstorepro_anti_flicker() {
 		var t=localStorage.getItem('pas_theme');
 		if(t==='dark'){document.documentElement.classList.add('dark-mode');}
 		var c=localStorage.getItem('pas_color');
-		if(c){try{var d=JSON.parse(c);var r=document.documentElement.style;r.setProperty('--primary',d.primary);r.setProperty('--primary-light',d.light);r.setProperty('--primary-bg',d.bg);}catch(e){}}
+		if(c){try{var d=JSON.parse(c);var hex=/^#[0-9A-Fa-f]{6}$/;if(hex.test(d.primary)&&hex.test(d.light)){var r=document.documentElement.style;r.setProperty('--primary',d.primary);r.setProperty('--primary-light',d.light);if(d.bg&&/^(#[0-9A-Fa-f]{6}|rgba?\()/.test(d.bg)){r.setProperty('--primary-bg',d.bg);}}}catch(e){}}
 	})();
 	</script>
 	<?php

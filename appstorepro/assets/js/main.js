@@ -179,28 +179,20 @@
       toggleParticleIcons(false);
     }
 
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize, { passive: true });
-
-    function createParticle() {
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2.5 + 0.8,
-        dx: (Math.random() - 0.5) * 0.5,
-        dy: (Math.random() - 0.5) * 0.5,
-        alpha: Math.random() * 0.5 + 0.2
-      };
-    }
-
     var COUNT = Math.min(60, Math.floor((window.innerWidth * window.innerHeight) / 12000));
     for (var i = 0; i < COUNT; i++) {
       particles.push(createParticle());
     }
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      var newCount = Math.min(60, Math.floor((canvas.width * canvas.height) / 12000));
+      while (particles.length < newCount) { particles.push(createParticle()); }
+      while (particles.length > newCount) { particles.pop(); }
+    }
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
 
     function getPrimaryColor() {
       return getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#FF6A00';
@@ -399,11 +391,11 @@
 
     playBtn.addEventListener('click', function () {
       var ytId = playBtn.dataset.ytid;
-      if (!ytId) return;
+      if (!ytId || !/^[A-Za-z0-9_-]{11}$/.test(ytId)) return;
       var thumb = document.getElementById('sa-tut-thumb');
       if (!thumb) return;
       var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.youtube-nocookie.com/embed/' + ytId + '?autoplay=1&rel=0';
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(ytId) + '?autoplay=1&rel=0';
       iframe.className = 'sa-tut-iframe';
       iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
       iframe.allowFullscreen = true;

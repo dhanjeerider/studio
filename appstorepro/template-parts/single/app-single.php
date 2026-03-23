@@ -97,7 +97,7 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 		<div class="sa-sc-scroll" id="sa-sc-scroll">
 			<?php foreach ( $screenshots as $i => $sc_url ) : ?>
 				<div class="sa-sc-item">
-					<img src="<?= esc_url( $sc_url ); ?>" alt="<?php printf( esc_attr__( '%s screenshot %d', 'appstorepro' ), esc_attr( get_the_title() ), $i + 1 ); ?>" loading="lazy" width="200" height="356">
+					<img src="<?= esc_url( $sc_url ); ?>" alt="<?php printf( esc_attr__( '%s screenshot %d', 'appstorepro' ), esc_attr( get_the_title() ), $i + 1 ); ?>" loading="lazy">
 				</div>
 			<?php endforeach; ?>
 		</div>
