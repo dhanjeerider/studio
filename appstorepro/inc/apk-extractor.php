@@ -264,6 +264,12 @@ function appstorepro_ajax_create_app_post() {
 		'_app_hero_image_url' => $app['hero'] ?? '',
 		'_app_screenshots'    => implode( "\n", array_map( 'esc_url_raw', array_filter( (array) ( $app['screenshots'] ?? [] ) ) ) ),
 		'_app_mod_info'       => $app['mod_info'] ?? '',
+		'_app_download_count' => $app['download_count'] ?? '',
+		'_app_reviews_count'  => $app['reviews_count']  ?? '',
+		'_app_last_updated'   => $app['last_updated']    ?? '',
+		'_app_content_rating' => $app['content_rating']  ?? '',
+		'_app_price'          => $app['price']           ?? '',
+		'_app_whats_new'      => $app['whats_new']       ?? '',
 	];
 
 	foreach ( $meta_map as $key => $value ) {
@@ -358,6 +364,12 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 		'version'         => '',
 		'package'         => '',
 		'play_store_url'  => $original_url,
+		'download_count'  => '',
+		'reviews_count'   => '',
+		'last_updated'    => '',
+		'content_rating'  => '',
+		'price'           => '',
+		'whats_new'       => '',
 	];
 
 	// Package ID from URL
@@ -382,6 +394,14 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 				$data['android_version'] = $data['android_version'] ?: ( $ld['operatingSystem'] ?? '' );
 				if ( isset( $ld['image'] ) && is_string( $ld['image'] ) ) {
 					$data['icon'] = $data['icon'] ?: $ld['image'];
+				}
+				$data['download_count'] = $data['download_count'] ?: ( (string) ( $ld['interactionStatistic']['userInteractionCount'] ?? $ld['interactionCount'] ?? '' ) );
+				$data['reviews_count']  = $data['reviews_count']  ?: ( (string) ( $ld['aggregateRating']['reviewCount'] ?? $ld['aggregateRating']['ratingCount'] ?? '' ) );
+				$data['last_updated']   = $data['last_updated']   ?: ( $ld['dateModified'] ?? $ld['datePublished'] ?? '' );
+				$data['content_rating'] = $data['content_rating'] ?: ( is_string( $ld['contentRating'] ?? '' ) ? ( $ld['contentRating'] ?? '' ) : '' );
+				$price_val = $ld['offers']['price'] ?? $ld['offers'][0]['price'] ?? null;
+				if ( null !== $price_val ) {
+					$data['price'] = ( '0' === (string) $price_val || 0 === $price_val ) ? 'Free' : (string) $price_val;
 				}
 				break;
 			}
@@ -465,8 +485,41 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 		}
 	}
 
+	// Download count fallback
+	if ( ! $data['download_count'] ) {
+		if ( preg_match( '#"(\d[\d,]*)\+"?\s*(?:downloads|installs)#i', $html, $m ) ) {
+			$data['download_count'] = preg_replace( '/[^0-9]/', '', $m[1] );
+		} elseif ( preg_match( '#(\d[\d,]+)\+\s*downloads#i', $html, $m ) ) {
+			$data['download_count'] = preg_replace( '/[^0-9]/', '', $m[1] );
+		}
+	}
+
+	// Reviews count fallback
+	if ( ! $data['reviews_count'] ) {
+		if ( preg_match( '#"ratingCount"\s*:\s*"?(\d+)"?#', $html, $m ) ) {
+			$data['reviews_count'] = $m[1];
+		}
+	}
+
+	// Last updated fallback
+	if ( ! $data['last_updated'] ) {
+		if ( preg_match( '#(?:Updated|Last updated)[^<]*<[^>]+>\s*([A-Za-z]+ \d{1,2},\s*\d{4}|\w+ \d{4})\s*<#i', $html, $m ) ) {
+			$data['last_updated'] = trim( $m[1] );
+		}
+	}
+
+	// Content rating fallback
+	if ( ! $data['content_rating'] ) {
+		if ( preg_match( '#(?:Content rating|Rated)[^<]*<[^>]+>\s*([A-Za-z0-9 ]+)\s*<#i', $html, $m ) ) {
+			$data['content_rating'] = trim( $m[1] );
+		}
+	}
+
 	// Sanitize all text fields
 	foreach ( [ 'title', 'developer', 'rating', 'category', 'android_version', 'version', 'size', 'package' ] as $k ) {
+		$data[ $k ] = sanitize_text_field( $data[ $k ] );
+	}
+	foreach ( [ 'download_count', 'reviews_count', 'last_updated', 'content_rating', 'price', 'whats_new' ] as $k ) {
 		$data[ $k ] = sanitize_text_field( $data[ $k ] );
 	}
 	$data['description'] = wp_kses_post( $data['description'] );

@@ -94,3 +94,24 @@ function appstorepro_posted_on() {
 function appstorepro_posted_by() {
 	echo '<span class="byline"><span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span></span>';
 }
+
+// appstorepro_format_download_count — format large numbers as 1K, 1M, etc.
+function appstorepro_format_download_count( $count ) {
+	$count = (int) preg_replace( '/[^0-9]/', '', (string) $count );
+	if ( $count >= 1000000000 ) {
+		return round( $count / 1000000000, 1 ) . 'B+';
+	}
+	if ( $count >= 1000000 ) {
+		return round( $count / 1000000, 1 ) . 'M+';
+	}
+	if ( $count >= 1000 ) {
+		return round( $count / 1000, 1 ) . 'K+';
+	}
+	return $count > 0 ? number_format( $count ) . '+' : '';
+}
+
+// appstorepro_format_rating — format rating to max 1 decimal
+function appstorepro_format_rating( $rating ) {
+	if ( ! $rating ) return '';
+	return number_format( (float) $rating, 1 );
+}

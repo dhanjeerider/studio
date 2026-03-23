@@ -47,6 +47,15 @@ function appstorepro_customize_register( $wp_customize ) {
 		'label'   => __( 'Primary Color', 'appstorepro' ),
 		'section' => 'appstorepro_colors',
 	] ) );
+	$wp_customize->add_setting( 'appstorepro_secondary_color', [
+		'default'           => '#3DDC84',
+		'sanitize_callback' => 'sanitize_hex_color',
+		'transport'         => 'postMessage',
+	] );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'appstorepro_secondary_color', [
+		'label'   => __( 'Secondary/Accent Color', 'appstorepro' ),
+		'section' => 'appstorepro_colors',
+	] ) );
 
 	// Section: Homepage Settings
 	$wp_customize->add_section( 'appstorepro_homepage', [
@@ -69,6 +78,54 @@ function appstorepro_customize_register( $wp_customize ) {
 	$wp_customize->add_control( 'appstorepro_hero_badge', [
 		'label'   => __( 'Hero Badge Text', 'appstorepro' ),
 		'section' => 'appstorepro_homepage',
+		'type'    => 'text',
+	] );
+	$wp_customize->add_setting( 'appstorepro_show_popular_slider', [ 'default' => '1', 'sanitize_callback' => 'sanitize_text_field' ] );
+	$wp_customize->add_control( 'appstorepro_show_popular_slider', [
+		'label'   => __( 'Show Popular Apps Slider', 'appstorepro' ),
+		'section' => 'appstorepro_homepage',
+		'type'    => 'checkbox',
+	] );
+	$wp_customize->add_setting( 'appstorepro_popular_slider_count', [ 'default' => '8', 'sanitize_callback' => 'absint' ] );
+	$wp_customize->add_control( 'appstorepro_popular_slider_count', [
+		'label'   => __( 'Popular Slider: Number of Apps', 'appstorepro' ),
+		'section' => 'appstorepro_homepage',
+		'type'    => 'number',
+	] );
+
+	// Section: CTA Settings
+	$wp_customize->add_section( 'appstorepro_cta', [
+		'title' => __( 'CTA Settings', 'appstorepro' ),
+		'panel' => 'appstorepro_theme_settings',
+	] );
+	$wp_customize->add_setting( 'appstorepro_telegram_cta_title', [ 'default' => 'Join Our Telegram', 'sanitize_callback' => 'sanitize_text_field' ] );
+	$wp_customize->add_control( 'appstorepro_telegram_cta_title', [
+		'label'   => __( 'Telegram CTA Title', 'appstorepro' ),
+		'section' => 'appstorepro_cta',
+		'type'    => 'text',
+	] );
+	$wp_customize->add_setting( 'appstorepro_telegram_cta_desc', [ 'default' => 'Get latest MODs, APKs & updates instantly!', 'sanitize_callback' => 'sanitize_textarea_field' ] );
+	$wp_customize->add_control( 'appstorepro_telegram_cta_desc', [
+		'label'   => __( 'Telegram CTA Description', 'appstorepro' ),
+		'section' => 'appstorepro_cta',
+		'type'    => 'textarea',
+	] );
+	$wp_customize->add_setting( 'appstorepro_telegram_cta_btn', [ 'default' => 'Join Now', 'sanitize_callback' => 'sanitize_text_field' ] );
+	$wp_customize->add_control( 'appstorepro_telegram_cta_btn', [
+		'label'   => __( 'Telegram CTA Button Text', 'appstorepro' ),
+		'section' => 'appstorepro_cta',
+		'type'    => 'text',
+	] );
+	$wp_customize->add_setting( 'appstorepro_telegram_cta_url', [ 'default' => '', 'sanitize_callback' => 'esc_url_raw' ] );
+	$wp_customize->add_control( 'appstorepro_telegram_cta_url', [
+		'label'   => __( 'Telegram CTA URL', 'appstorepro' ),
+		'section' => 'appstorepro_cta',
+		'type'    => 'url',
+	] );
+	$wp_customize->add_setting( 'appstorepro_telegram_cta_members', [ 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ] );
+	$wp_customize->add_control( 'appstorepro_telegram_cta_members', [
+		'label'   => __( 'Telegram CTA Members Count', 'appstorepro' ),
+		'section' => 'appstorepro_cta',
 		'type'    => 'text',
 	] );
 

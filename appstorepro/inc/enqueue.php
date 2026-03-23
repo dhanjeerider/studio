@@ -5,6 +5,13 @@ function appstorepro_enqueue_scripts() {
 	$ver = wp_get_theme()->get( 'Version' );
 
 	wp_enqueue_style(
+		'boxicons',
+		'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css',
+		[],
+		'2.1.4'
+	);
+
+	wp_enqueue_style(
 		'appstorepro-main',
 		get_template_directory_uri() . '/assets/css/main.css',
 		[],

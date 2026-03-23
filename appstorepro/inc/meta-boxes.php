@@ -2,14 +2,24 @@
 // inc/meta-boxes.php — App Details meta box
 
 function appstorepro_add_meta_boxes() {
-	add_meta_box(
-		'appstorepro_app_details',
-		__( 'App Details', 'appstorepro' ),
-		'appstorepro_app_details_callback',
-		'app',
-		'normal',
-		'high'
-	);
+	foreach ( [ 'app', 'game' ] as $post_type ) {
+		add_meta_box(
+			'appstorepro_app_details',
+			__( 'App Details', 'appstorepro' ),
+			'appstorepro_app_details_callback',
+			$post_type,
+			'normal',
+			'high'
+		);
+		add_meta_box(
+			'appstorepro_app_faq',
+			__( 'FAQ (Frequently Asked Questions)', 'appstorepro' ),
+			'appstorepro_app_faq_callback',
+			$post_type,
+			'normal',
+			'default'
+		);
+	}
 }
 add_action( 'add_meta_boxes', 'appstorepro_add_meta_boxes' );
 
@@ -31,6 +41,12 @@ function appstorepro_app_details_callback( $post ) {
 		[ 'key' => '_app_telegram_members', 'label' => 'Telegram Members Count',     'type' => 'text' ],
 		[ 'key' => '_app_youtube_url',      'label' => 'YouTube Tutorial URL',       'type' => 'url' ],
 		[ 'key' => '_app_mod_info',         'label' => 'MOD Info',                   'type' => 'text' ],
+		[ 'key' => '_app_download_count',   'label' => 'Download Count (e.g. 10000000)', 'type' => 'text' ],
+		[ 'key' => '_app_reviews_count',    'label' => 'Reviews Count',                  'type' => 'text' ],
+		[ 'key' => '_app_last_updated',     'label' => 'Last Updated (e.g. May 2025)',    'type' => 'text' ],
+		[ 'key' => '_app_content_rating',   'label' => 'Content Rating (e.g. Everyone)', 'type' => 'text' ],
+		[ 'key' => '_app_price',            'label' => 'Price (e.g. Free)',               'type' => 'text' ],
+		[ 'key' => '_app_whats_new',        'label' => "What's New",                     'type' => 'text' ],
 	];
 
 	$category_icon_options = [
@@ -91,7 +107,12 @@ function appstorepro_app_details_callback( $post ) {
 	echo '</tbody></table>';
 }
 
-function appstorepro_save_app_meta( $post_id ) {
+function appstorepro_app_faq_callback( $post ) {
+	wp_nonce_field( 'appstorepro_app_details_save', 'appstorepro_app_details_nonce' );
+	$faq_val = get_post_meta( $post->ID, '_app_faq', true );
+	echo '<p style="color:#666;font-size:0.9em;">' . esc_html__( 'Enter Q&A pairs. Format each pair as:', 'appstorepro' ) . '<br><code>Q: Your question here<br>A: Your answer here<br>---</code></p>';
+	echo '<textarea id="app_faq" name="_app_faq" rows="10" class="large-text" placeholder="Q: What is this app?\nA: It is a great app.\n---\nQ: Is it free?\nA: Yes, it is free.\n---">' . esc_textarea( $faq_val ) . '</textarea>';
+}( $post_id ) {
 	if ( ! isset( $_POST['appstorepro_app_details_nonce'] ) ) {
 		return;
 	}
@@ -108,7 +129,8 @@ function appstorepro_save_app_meta( $post_id ) {
 	$text_fields = [
 		'_app_version', '_app_size', '_app_developer', '_app_rating',
 		'_app_android_version', '_app_telegram_members', '_app_mod_info', '_app_category_icon',
-		'_app_package',
+		'_app_package', '_app_download_count', '_app_reviews_count', '_app_last_updated',
+		'_app_content_rating', '_app_price', '_app_whats_new',
 	];
 	$url_fields = [
 		'_app_icon_url', '_app_download_url', '_app_play_store_url',
@@ -131,7 +153,12 @@ function appstorepro_save_app_meta( $post_id ) {
 		update_post_meta( $post_id, '_app_screenshots', sanitize_textarea_field( wp_unslash( $_POST['_app_screenshots'] ) ) );
 	}
 
+	if ( isset( $_POST['_app_faq'] ) ) {
+		update_post_meta( $post_id, '_app_faq', sanitize_textarea_field( wp_unslash( $_POST['_app_faq'] ) ) );
+	}
+
 	$is_mod = isset( $_POST['_app_is_mod'] ) ? '1' : '0';
 	update_post_meta( $post_id, '_app_is_mod', $is_mod );
 }
 add_action( 'save_post_app', 'appstorepro_save_app_meta' );
+add_action( 'save_post_game', 'appstorepro_save_app_meta' );

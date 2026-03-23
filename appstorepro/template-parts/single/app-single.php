@@ -6,7 +6,8 @@ $hero_img       = appstorepro_get_app_meta( $post_id, '_app_hero_image_url' );
 $version        = appstorepro_get_app_meta( $post_id, '_app_version' );
 $size           = appstorepro_get_app_meta( $post_id, '_app_size' );
 $developer      = appstorepro_get_app_meta( $post_id, '_app_developer' );
-$rating         = appstorepro_get_app_meta( $post_id, '_app_rating' );
+$rating_raw     = appstorepro_get_app_meta( $post_id, '_app_rating' );
+$rating         = appstorepro_format_rating( $rating_raw );
 $android_ver    = appstorepro_get_app_meta( $post_id, '_app_android_version' );
 $download_url   = appstorepro_get_app_meta( $post_id, '_app_download_url' );
 $play_store_url = appstorepro_get_app_meta( $post_id, '_app_play_store_url' );
@@ -20,6 +21,12 @@ $screenshots    = $screenshots_raw ? array_filter( array_map( 'trim', explode( "
 $terms          = get_the_terms( $post_id, 'app-category' );
 $cat_name       = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
 $cat_link       = ( $terms && ! is_wp_error( $terms ) ) ? get_term_link( $terms[0] ) : '';
+$download_count  = appstorepro_get_app_meta( $post_id, '_app_download_count' );
+$reviews_count   = appstorepro_get_app_meta( $post_id, '_app_reviews_count' );
+$last_updated    = appstorepro_get_app_meta( $post_id, '_app_last_updated' );
+$content_rating  = appstorepro_get_app_meta( $post_id, '_app_content_rating' );
+$price           = appstorepro_get_app_meta( $post_id, '_app_price' );
+$whats_new       = appstorepro_get_app_meta( $post_id, '_app_whats_new' );
 
 // Effective icon
 $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $post_id, 'app-icon' ) : '' );
@@ -159,6 +166,14 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 </section>
 <?php endif; ?>
 
+<!-- What's New section -->
+<?php if ( $whats_new ) : ?>
+<section class="sa-whatsnew-section container pas-reveal">
+	<h2 class="sa-section-title"><?php esc_html_e( "What's New", 'appstorepro' ); ?></h2>
+	<div class="sa-whatsnew-text"><?= wp_kses_post( nl2br( esc_html( $whats_new ) ) ); ?></div>
+</section>
+<?php endif; ?>
+
 <!-- App Details Table -->
 <section class="sa-details-section container pas-reveal">
 	<h2 class="sa-section-title"><?php esc_html_e( 'App Details', 'appstorepro' ); ?></h2>
@@ -197,6 +212,36 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 						<?= esc_html( $cat_name ); ?>
 					<?php endif; ?>
 				</span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $download_count ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Downloads', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( appstorepro_format_download_count( $download_count ) ); ?></span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $reviews_count ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Reviews', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( appstorepro_format_download_count( $reviews_count ) ); ?></span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $last_updated ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Last Updated', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( $last_updated ); ?></span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $content_rating ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Content Rating', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( $content_rating ); ?></span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $price ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Price', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( $price ); ?></span>
 			</div>
 		<?php endif; ?>
 		<div class="sa-details-row">
@@ -248,12 +293,54 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 </section>
 <?php endif; ?>
 
-<!-- App Content -->
+<!-- App Content with show-more fold -->
 <?php if ( get_the_content() ) : ?>
 <section class="sa-content container pas-reveal">
 	<h2 class="sa-section-title"><?php esc_html_e( 'About', 'appstorepro' ); ?></h2>
-	<div class="entry-content">
-		<?php the_content(); ?>
+	<div class="sa-content-fold" id="sa-content-fold">
+		<div class="entry-content sa-content-inner" id="sa-content-inner">
+			<?php the_content(); ?>
+		</div>
+		<div class="sa-content-gradient" id="sa-content-gradient" aria-hidden="true"></div>
+	</div>
+	<button class="sa-show-more-btn" id="sa-show-more-btn" aria-expanded="false">
+		<span class="sa-show-more-text"><?php esc_html_e( 'Show More', 'appstorepro' ); ?></span>
+		<i class='bx bx-chevron-down sa-show-more-icon'></i>
+	</button>
+</section>
+<?php endif; ?>
+
+<!-- FAQ Section -->
+<?php
+$faq_raw = appstorepro_get_app_meta( $post_id, '_app_faq' );
+$faq_items = [];
+if ( $faq_raw ) {
+	$blocks = preg_split( '/\n---\n/', $faq_raw );
+	foreach ( $blocks as $block ) {
+		$block = trim( $block );
+		if ( ! $block ) continue;
+		$q = ''; $a = '';
+		if ( preg_match( '/^Q:\s*(.+)/m', $block, $qm ) ) $q = trim( $qm[1] );
+		if ( preg_match( '/^A:\s*(.+)/ms', $block, $am ) ) $a = trim( $am[1] );
+		if ( $q && $a ) $faq_items[] = [ 'q' => $q, 'a' => $a ];
+	}
+}
+?>
+<?php if ( $faq_items ) : ?>
+<section class="sa-faq-section container pas-reveal">
+	<h2 class="sa-section-title"><?php esc_html_e( 'FAQ', 'appstorepro' ); ?></h2>
+	<div class="sa-faq-list">
+		<?php foreach ( $faq_items as $i => $faq ) : ?>
+		<div class="sa-faq-item" id="faq-<?= esc_attr( $i ); ?>">
+			<button class="sa-faq-q" aria-expanded="false" aria-controls="faq-a-<?= esc_attr( $i ); ?>">
+				<span><?= esc_html( $faq['q'] ); ?></span>
+				<i class='bx bx-plus sa-faq-icon'></i>
+			</button>
+			<div class="sa-faq-a" id="faq-a-<?= esc_attr( $i ); ?>" hidden>
+				<p><?= wp_kses_post( nl2br( $faq['a'] ) ); ?></p>
+			</div>
+		</div>
+		<?php endforeach; ?>
 	</div>
 </section>
 <?php endif; ?>
