@@ -55,6 +55,8 @@ function appstorepro_anti_flicker() {
 		if(t==='dark'){document.documentElement.classList.add('dark-mode');}
 		var c=localStorage.getItem('pas_color');
 		if(c){try{var d=JSON.parse(c);var hex=/^#[0-9A-Fa-f]{6}$/;if(hex.test(d.primary)&&hex.test(d.light)){var r=document.documentElement.style;r.setProperty('--primary',d.primary);r.setProperty('--primary-light',d.light);if(d.bg&&/^(#[0-9A-Fa-f]{6}|rgba?\()/.test(d.bg)){r.setProperty('--primary-bg',d.bg);}}}catch(e){}}
+		document.documentElement.classList.add('js');
+		window._pasRevealFailsafe=setTimeout(function(){var e=document.querySelectorAll('.pas-reveal');for(var i=0;i<e.length;i++){e[i].classList.add('pas-visible');}},2000);
 	})();
 	</script>
 	<?php
