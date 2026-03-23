@@ -17,6 +17,7 @@ function appstorepro_app_details_callback( $post ) {
 	wp_nonce_field( 'appstorepro_app_details_save', 'appstorepro_app_details_nonce' );
 
 	$fields = [
+		[ 'key' => '_app_package',          'label' => 'Package ID (e.g. com.example.app)', 'type' => 'text' ],
 		[ 'key' => '_app_version',          'label' => 'App Version',                'type' => 'text' ],
 		[ 'key' => '_app_size',             'label' => 'File Size',                  'type' => 'text' ],
 		[ 'key' => '_app_developer',        'label' => 'Developer',                  'type' => 'text' ],
@@ -107,6 +108,7 @@ function appstorepro_save_app_meta( $post_id ) {
 	$text_fields = [
 		'_app_version', '_app_size', '_app_developer', '_app_rating',
 		'_app_android_version', '_app_telegram_members', '_app_mod_info', '_app_category_icon',
+		'_app_package',
 	];
 	$url_fields = [
 		'_app_icon_url', '_app_download_url', '_app_play_store_url',
