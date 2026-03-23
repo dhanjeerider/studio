@@ -6,7 +6,8 @@ $hero_img       = appstorepro_get_app_meta( $post_id, '_app_hero_image_url' );
 $version        = appstorepro_get_app_meta( $post_id, '_app_version' );
 $size           = appstorepro_get_app_meta( $post_id, '_app_size' );
 $developer      = appstorepro_get_app_meta( $post_id, '_app_developer' );
-$rating         = appstorepro_get_app_meta( $post_id, '_app_rating' );
+$rating_raw     = appstorepro_get_app_meta( $post_id, '_app_rating' );
+$rating         = $rating_raw ? number_format( (float) $rating_raw, 1, '.', '' ) : '';
 $android_ver    = appstorepro_get_app_meta( $post_id, '_app_android_version' );
 $download_url   = appstorepro_get_app_meta( $post_id, '_app_download_url' );
 $play_store_url = appstorepro_get_app_meta( $post_id, '_app_play_store_url' );
@@ -15,6 +16,8 @@ $tg_members     = appstorepro_get_app_meta( $post_id, '_app_telegram_members' );
 $youtube_url    = appstorepro_get_app_meta( $post_id, '_app_youtube_url' );
 $is_mod         = appstorepro_get_app_meta( $post_id, '_app_is_mod' );
 $mod_info       = appstorepro_get_app_meta( $post_id, '_app_mod_info' );
+$downloads_raw  = appstorepro_get_app_meta( $post_id, '_app_downloads' );
+$downloads      = appstorepro_format_downloads( $downloads_raw );
 $screenshots_raw = appstorepro_get_app_meta( $post_id, '_app_screenshots' );
 $screenshots    = $screenshots_raw ? array_filter( array_map( 'trim', explode( "\n", $screenshots_raw ) ) ) : [];
 $terms          = get_the_terms( $post_id, 'app-category' );
@@ -62,6 +65,9 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 				<?php if ( $size ) : ?>
 					<span class="sa-pill sa-pill-size"><?= esc_html( $size ); ?></span>
 				<?php endif; ?>
+				<?php if ( $downloads ) : ?>
+					<span class="sa-pill sa-pill-downloads"><i class="bx bx-download"></i> <?= esc_html( $downloads ); ?></span>
+				<?php endif; ?>
 				<?php if ( $is_mod ) : ?>
 					<span class="sa-pill sa-pill-mod">MOD</span>
 				<?php endif; ?>
@@ -72,17 +78,12 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 			<div class="sa-actions">
 				<?php if ( $download_url ) : ?>
 					<a href="<?= esc_url( $download_url ); ?>" class="sa-btn-dl" rel="nofollow noopener" target="_blank">
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-							<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-						</svg>
+						<i class="bx bxs-download"></i>
 						<?php esc_html_e( 'Download APK', 'appstorepro' ); ?>
 					</a>
 				<?php endif; ?>
 				<button class="sa-btn-share btn-icon" id="sa-share-btn" aria-label="<?php esc_attr_e( 'Share this app', 'appstorepro' ); ?>">
-					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
-						<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-						<line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-					</svg>
+					<i class="bx bx-share-alt"></i>
 				</button>
 			</div>
 		</div>
@@ -117,7 +118,7 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 <section class="sa-tg-section container pas-reveal">
 	<div class="sa-tg-card">
 		<div class="sa-tg-icon">
-			<svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.025 9.546c-.152.667-.548.833-1.112.518l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.215-3.053 5.56-5.023c.242-.215-.052-.334-.373-.119L6.74 14.377 3.8 13.46c-.66-.205-.673-.66.138-.978l10.89-4.197c.548-.198 1.028.134.734.963z"/></svg>
+			<i class="bx bxl-telegram"></i>
 		</div>
 		<div class="sa-tg-info">
 			<div class="sa-tg-title"><?php esc_html_e( 'Join our Telegram', 'appstorepro' ); ?></div>
@@ -136,9 +137,7 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 <?php if ( $download_url ) : ?>
 <section class="sa-dl-section container pas-reveal">
 	<a href="<?= esc_url( $download_url ); ?>" class="sa-btn-dl sa-btn-dl-lg" rel="nofollow noopener" target="_blank">
-		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
-			<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-		</svg>
+		<i class="bx bxs-download"></i>
 		<?php esc_html_e( 'Download APK', 'appstorepro' ); ?>
 		<?php if ( $size ) : ?>
 			<span class="sa-btn-dl-size"><?= esc_html( $size ); ?></span>
@@ -146,7 +145,7 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 	</a>
 	<?php if ( $play_store_url ) : ?>
 		<a href="<?= esc_url( $play_store_url ); ?>" class="sa-btn-playstore" target="_blank" rel="noopener noreferrer">
-			<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M3 20.5v-17c0-.83 1-1.3 1.7-.8l14 8.5c.7.4.7 1.5 0 1.9l-14 8.5c-.7.5-1.7.03-1.7-.8z"/></svg>
+			<i class="bx bxl-play-store"></i>
 			<?php esc_html_e( 'Get on Play Store', 'appstorepro' ); ?>
 		</a>
 	<?php endif; ?>
@@ -179,6 +178,12 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 			<div class="sa-details-row">
 				<span class="sa-details-key"><?php esc_html_e( 'Developer', 'appstorepro' ); ?></span>
 				<span class="sa-details-val"><?= esc_html( $developer ); ?></span>
+			</div>
+		<?php endif; ?>
+		<?php if ( $downloads ) : ?>
+			<div class="sa-details-row">
+				<span class="sa-details-key"><?php esc_html_e( 'Downloads', 'appstorepro' ); ?></span>
+				<span class="sa-details-val"><?= esc_html( $downloads ); ?></span>
 			</div>
 		<?php endif; ?>
 		<?php if ( $android_ver ) : ?>
@@ -252,9 +257,12 @@ $icon_src = $icon_url ?: ( has_post_thumbnail() ? get_the_post_thumbnail_url( $p
 <?php if ( get_the_content() ) : ?>
 <section class="sa-content container pas-reveal">
 	<h2 class="sa-section-title"><?php esc_html_e( 'About', 'appstorepro' ); ?></h2>
-	<div class="entry-content">
+	<div class="entry-content" id="sa-entry-content">
 		<?php the_content(); ?>
 	</div>
+	<button class="sa-show-more" id="sa-show-more" type="button" data-show-label="<?php esc_attr_e( 'Show more', 'appstorepro' ); ?>" data-hide-label="<?php esc_attr_e( 'Show less', 'appstorepro' ); ?>">
+		<?php esc_html_e( 'Show more', 'appstorepro' ); ?>
+	</button>
 </section>
 <?php endif; ?>
 

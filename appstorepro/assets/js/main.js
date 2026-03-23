@@ -24,6 +24,7 @@
     initTutorialAccordion();
     initYoutubeEmbed();
     initShareButton();
+    initContentFold();
     initRevealAnimations();
     initSystemTheme();
   }
@@ -258,6 +259,37 @@
     var iconOff = document.getElementById('particle-icon-off');
     if (iconOn) iconOn.style.display = on ? '' : 'none';
     if (iconOff) iconOff.style.display = on ? 'none' : '';
+  }
+
+  /* ── Content Fold (About section) ── */
+  function initContentFold() {
+    var content = document.getElementById('sa-entry-content');
+    var btn = document.getElementById('sa-show-more');
+    if (!content || !btn) return;
+
+    var fullHeight = content.scrollHeight;
+    var collapsedHeight = Math.max(200, Math.round(fullHeight * 0.25));
+    if (fullHeight <= collapsedHeight + 60) {
+      btn.style.display = 'none';
+      return;
+    }
+
+    content.style.maxHeight = collapsedHeight + 'px';
+    content.classList.add('collapsed');
+
+    btn.addEventListener('click', function () {
+      var isCollapsed = content.classList.contains('collapsed');
+      if (isCollapsed) {
+        content.style.maxHeight = fullHeight + 'px';
+        content.classList.remove('collapsed');
+        btn.textContent = btn.dataset.hideLabel || 'Show less';
+      } else {
+        content.style.maxHeight = collapsedHeight + 'px';
+        content.classList.add('collapsed');
+        btn.textContent = btn.dataset.showLabel || 'Show more';
+        content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   }
 
   /* ── Header Scroll Shadow ── */

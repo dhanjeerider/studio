@@ -25,16 +25,14 @@ $cats = get_terms( [
 				?>
 				<a href="<?= esc_url( get_term_link( $cat ) ); ?>" class="tc-card">
 					<div class="tc-card-icon">
-						<?= wp_kses( $svg, appstorepro_allowed_svg_kses() ); // Hardcoded SVG strings from template-tags.php ?>
+						<?= wp_kses( $svg, appstorepro_allowed_svg_kses() ); // Boxicons markup from template-tags.php ?>
 					</div>
 					<div class="tc-card-info">
 						<div class="tc-card-name"><?= esc_html( $cat->name ); ?></div>
 						<div class="tc-card-count"><?= esc_html( $cat->count ); ?> <?php esc_html_e( 'apps', 'appstorepro' ); ?></div>
 					</div>
 					<span class="tc-card-arrow">
-						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="14" height="14">
-							<polyline points="9 18 15 12 9 6"/>
-						</svg>
+						<i class="bx bx-chevron-right"></i>
 					</span>
 				</a>
 			<?php endforeach; ?>

@@ -6,7 +6,7 @@ function appstorepro_add_meta_boxes() {
 		'appstorepro_app_details',
 		__( 'App Details', 'appstorepro' ),
 		'appstorepro_app_details_callback',
-		'app',
+		[ 'app', 'game' ],
 		'normal',
 		'high'
 	);
@@ -21,6 +21,7 @@ function appstorepro_app_details_callback( $post ) {
 		[ 'key' => '_app_version',          'label' => 'App Version',                'type' => 'text' ],
 		[ 'key' => '_app_size',             'label' => 'File Size',                  'type' => 'text' ],
 		[ 'key' => '_app_developer',        'label' => 'Developer',                  'type' => 'text' ],
+		[ 'key' => '_app_downloads',        'label' => 'Downloads (e.g. 1M+)',      'type' => 'text' ],
 		[ 'key' => '_app_icon_url',         'label' => 'App Icon URL',               'type' => 'url' ],
 		[ 'key' => '_app_download_url',     'label' => 'Download URL',               'type' => 'url' ],
 		[ 'key' => '_app_play_store_url',   'label' => 'Play Store URL',             'type' => 'url' ],
@@ -108,7 +109,7 @@ function appstorepro_save_app_meta( $post_id ) {
 	$text_fields = [
 		'_app_version', '_app_size', '_app_developer', '_app_rating',
 		'_app_android_version', '_app_telegram_members', '_app_mod_info', '_app_category_icon',
-		'_app_package',
+		'_app_package', '_app_downloads',
 	];
 	$url_fields = [
 		'_app_icon_url', '_app_download_url', '_app_play_store_url',
@@ -135,3 +136,4 @@ function appstorepro_save_app_meta( $post_id ) {
 	update_post_meta( $post_id, '_app_is_mod', $is_mod );
 }
 add_action( 'save_post_app', 'appstorepro_save_app_meta' );
+add_action( 'save_post_game', 'appstorepro_save_app_meta' );

@@ -4,10 +4,12 @@ $layout      = $args['layout'] ?? 'grid';
 $post_id     = get_the_ID();
 $icon_url    = appstorepro_get_app_meta( $post_id, '_app_icon_url' );
 $rating      = appstorepro_get_app_meta( $post_id, '_app_rating' );
+$rating      = $rating ? number_format( (float) $rating, 1, '.', '' ) : '';
 $size        = appstorepro_get_app_meta( $post_id, '_app_size' );
 $version     = appstorepro_get_app_meta( $post_id, '_app_version' );
 $is_mod      = appstorepro_get_app_meta( $post_id, '_app_is_mod' );
 $developer   = appstorepro_get_app_meta( $post_id, '_app_developer' );
+$downloads   = appstorepro_format_downloads( appstorepro_get_app_meta( $post_id, '_app_downloads' ) );
 $terms       = get_the_terms( $post_id, 'app-category' );
 $cat_name    = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
 $cat_link    = ( $terms && ! is_wp_error( $terms ) ) ? get_term_link( $terms[0] ) : '';
@@ -30,11 +32,17 @@ if ( $layout === 'list' ) : ?>
 				<div class="app-row-dev"><?= esc_html( $developer ); ?></div>
 			<?php endif; ?>
 			<div class="app-row-meta">
+				<?php if ( is_sticky() ) : ?>
+					<span class="badge-hot"><?php esc_html_e( 'Hot', 'appstorepro' ); ?></span>
+				<?php endif; ?>
 				<?php if ( $rating ) : ?>
 					<span class="app-row-rating"><?= esc_html( $rating ); ?> ★</span>
 				<?php endif; ?>
 				<?php if ( $size ) : ?>
 					<span class="app-row-size"><?= esc_html( $size ); ?></span>
+				<?php endif; ?>
+				<?php if ( $downloads ) : ?>
+					<span class="app-row-downloads"><i class="bx bx-download"></i> <?= esc_html( $downloads ); ?></span>
 				<?php endif; ?>
 				<?php if ( $is_mod ) : ?>
 					<span class="badge-mod">MOD</span>
@@ -54,9 +62,14 @@ if ( $layout === 'list' ) : ?>
 			<?php else : ?>
 				<div class="app-icon-placeholder"><?= esc_html( mb_substr( get_the_title(), 0, 1 ) ); ?></div>
 			<?php endif; ?>
-			<?php if ( $is_mod ) : ?>
-				<span class="badge-mod app-card-mod-badge">MOD</span>
-			<?php endif; ?>
+			<div class="app-card-badges">
+				<?php if ( is_sticky() ) : ?>
+					<span class="badge-hot"><?php esc_html_e( 'Hot', 'appstorepro' ); ?></span>
+				<?php endif; ?>
+				<?php if ( $is_mod ) : ?>
+					<span class="badge-mod app-card-mod-badge">MOD</span>
+				<?php endif; ?>
+			</div>
 		</div>
 		<div class="app-card-info">
 			<h3 class="app-card-title"><?= esc_html( get_the_title() ); ?></h3>
@@ -74,6 +87,9 @@ if ( $layout === 'list' ) : ?>
 				<?php endif; ?>
 				<?php if ( $size ) : ?>
 					<span class="app-card-size"><?= esc_html( $size ); ?></span>
+				<?php endif; ?>
+				<?php if ( $downloads ) : ?>
+					<span class="app-card-downloads"><i class="bx bx-download"></i> <?= esc_html( $downloads ); ?></span>
 				<?php endif; ?>
 			</div>
 		</div>

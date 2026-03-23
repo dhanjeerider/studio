@@ -15,6 +15,14 @@ function appstorepro_apk_extractor_menu() {
 		'appstorepro-apk-extractor',
 		'appstorepro_apk_extractor_page'
 	);
+	add_submenu_page(
+		'edit.php?post_type=game',
+		__( 'APK Extractor', 'appstorepro' ),
+		__( 'APK Extractor', 'appstorepro' ),
+		'edit_posts',
+		'appstorepro-apk-extractor',
+		'appstorepro_apk_extractor_page'
+	);
 }
 add_action( 'admin_menu', 'appstorepro_apk_extractor_menu' );
 
@@ -95,6 +103,13 @@ function appstorepro_apk_extractor_page() {
 						</button>
 					</div>
 					<p class="apk-hint"><?php esc_html_e( 'e.g. https://play.google.com/store/apps/details?id=com.whatsapp', 'appstorepro' ); ?></p>
+				</div>
+				<div class="apk-field-row">
+					<label for="apk-target-type"><?php esc_html_e( 'Create as', 'appstorepro' ); ?></label>
+					<select id="apk-target-type">
+						<option value="app"><?php esc_html_e( 'App', 'appstorepro' ); ?></option>
+						<option value="game"><?php esc_html_e( 'Game', 'appstorepro' ); ?></option>
+					</select>
 				</div>
 			</div>
 
@@ -205,6 +220,10 @@ function appstorepro_ajax_create_app_post() {
 
 	$raw = isset( $_POST['app_data'] ) ? wp_unslash( $_POST['app_data'] ) : '';
 	$app = json_decode( $raw, true );
+	$post_type = isset( $_POST['post_type'] ) ? sanitize_key( wp_unslash( $_POST['post_type'] ) ) : 'app';
+	if ( ! in_array( $post_type, [ 'app', 'game' ], true ) ) {
+		$post_type = 'app';
+	}
 
 	if ( ! $app || empty( $app['title'] ) ) {
 		wp_send_json_error( [ 'message' => __( 'Invalid app data.', 'appstorepro' ) ] );
@@ -216,7 +235,7 @@ function appstorepro_ajax_create_app_post() {
 	// Check for existing post with same package
 	if ( $skip_existing && $package ) {
 		$existing = get_posts( [
-			'post_type'      => 'app',
+			'post_type'      => [ 'app', 'game' ],
 			'posts_per_page' => 1,
 			'meta_query'     => [
 				[
@@ -243,7 +262,7 @@ function appstorepro_ajax_create_app_post() {
 		'post_title'   => sanitize_text_field( $app['title'] ),
 		'post_content' => wp_kses_post( $app['description'] ?? '' ),
 		'post_status'  => 'draft',
-		'post_type'    => 'app',
+		'post_type'    => $post_type,
 		'post_author'  => get_current_user_id(),
 	], true );
 
@@ -264,6 +283,7 @@ function appstorepro_ajax_create_app_post() {
 		'_app_hero_image_url' => $app['hero'] ?? '',
 		'_app_screenshots'    => implode( "\n", array_map( 'esc_url_raw', array_filter( (array) ( $app['screenshots'] ?? [] ) ) ) ),
 		'_app_mod_info'       => $app['mod_info'] ?? '',
+		'_app_downloads'      => $app['downloads'] ?? '',
 	];
 
 	foreach ( $meta_map as $key => $value ) {
@@ -354,6 +374,7 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 		'screenshots'     => [],
 		'category'        => '',
 		'size'            => '',
+		'downloads'       => '',
 		'android_version' => '',
 		'version'         => '',
 		'package'         => '',
@@ -456,6 +477,22 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 		}
 	}
 
+	// ── Downloads / Installs ──
+	if ( ! $data['downloads'] ) {
+		if ( preg_match( '#Installs</div><span[^>]*><div[^>]*><span[^>]*>([^<]+)</span>#si', $html, $m ) ) {
+			$data['downloads'] = html_entity_decode( trim( $m[1] ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		} elseif ( preg_match( '#"interactionCount"\s*:\s*"UserDownloads:([^"]+)"#i', $html, $m ) ) {
+			$data['downloads'] = trim( $m[1] );
+		} elseif ( preg_match( '#itemprop="downloadCount"[^>]*content="([^"]+)"#i', $html, $m ) ) {
+			$data['downloads'] = html_entity_decode( trim( $m[1] ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+		}
+	}
+
+	// ── Size fallback ──
+	if ( ! $data['size'] && preg_match( '#Size</div><span[^>]*><div[^>]*><span[^>]*>([^<]+)</span>#si', $html, $m ) ) {
+		$data['size'] = html_entity_decode( trim( $m[1] ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	}
+
 	// ── Android version ──
 	if ( ! $data['android_version'] ) {
 		if ( preg_match( '#Requires Android</span>[^<]*<span[^>]*>([0-9.]+\+?[^<]*)</span>#si', $html, $m ) ) {
@@ -466,8 +503,11 @@ function appstorepro_parse_playstore_html( $html, $original_url ) {
 	}
 
 	// Sanitize all text fields
-	foreach ( [ 'title', 'developer', 'rating', 'category', 'android_version', 'version', 'size', 'package' ] as $k ) {
+	foreach ( [ 'title', 'developer', 'rating', 'category', 'android_version', 'version', 'size', 'package', 'downloads' ] as $k ) {
 		$data[ $k ] = sanitize_text_field( $data[ $k ] );
+	}
+	if ( $data['rating'] ) {
+		$data['rating'] = number_format( (float) $data['rating'], 1, '.', '' );
 	}
 	$data['description'] = wp_kses_post( $data['description'] );
 	$data['icon']        = esc_url_raw( $data['icon'] );

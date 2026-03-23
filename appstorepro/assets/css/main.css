@@ -546,6 +546,7 @@ body.dark-mode .icon-moon { display: block; }
   flex-shrink: 0;
 }
 .tc-card-icon svg { width: 20px; height: 20px; }
+.tc-card-icon i { font-size: 20px; line-height: 1; }
 .tc-card-info { flex: 1; min-width: 0; }
 .tc-card-name { font-size: 0.85rem; font-weight: 600; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
 .tc-card-count { font-size: 0.75rem; color: var(--gray); }
@@ -1264,3 +1265,18 @@ body.dark-mode .icon-moon { display: block; }
   .app-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
   .tc-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ── Additions: downloads badge + show more fold ── */
+.app-card-downloads,.app-row-downloads{display:inline-flex;align-items:center;gap:4px;color:var(--text-muted,#596273);}
+.app-card-badges{position:absolute;top:8px;left:8px;display:flex;gap:6px;flex-wrap:wrap}
+.badge-hot{background:linear-gradient(135deg,#ff512f,#f09819);color:#fff;font-size:11px;padding:4px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;box-shadow:0 8px 20px rgba(240,152,25,.25);}
+.sa-pill-downloads i,
+.app-card-downloads i,
+.app-row-downloads i{font-size:14px;vertical-align:middle;}
+
+.sa-content .entry-content{position:relative;overflow:hidden;transition:max-height .35s ease;}
+.sa-content .entry-content.collapsed::after{content:"";position:absolute;bottom:0;left:0;right:0;height:120px;background:linear-gradient(180deg,rgba(255,255,255,0) 0%,var(--page-bg,#fff) 100%);pointer-events:none;}
+.dark-mode .sa-content .entry-content.collapsed::after{background:linear-gradient(180deg,rgba(15,23,42,0) 0%,rgba(15,23,42,0.9) 100%);}
+.sa-show-more{margin-top:12px;border:1px solid rgba(0,0,0,.08);background:var(--primary,#ff6a00);color:#fff;padding:10px 16px;border-radius:999px;font-weight:600;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease;}
+.sa-show-more:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(0,0,0,.08);}
+.sa-show-more:active{transform:translateY(0);}

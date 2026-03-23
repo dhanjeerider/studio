@@ -77,6 +77,7 @@
     if (app.rating) pills += '<span class="apk-pill">&#9733; ' + escHtml(app.rating) + '</span>';
     if (app.category) pills += '<span class="apk-pill">' + escHtml(app.category) + '</span>';
     if (app.size) pills += '<span class="apk-pill">' + escHtml(app.size) + '</span>';
+    if (app.downloads) pills += '<span class="apk-pill">' + escHtml(app.downloads) + '</span>';
     if (app.android_version) pills += '<span class="apk-pill">Android ' + escHtml(app.android_version) + '+</span>';
     $('#apk-result-pills').html(pills);
 
@@ -86,6 +87,7 @@
       { label: 'Package ID', key: 'package' },
       { label: 'Version', key: 'version' },
       { label: 'Size', key: 'size' },
+      { label: 'Downloads', key: 'downloads' },
       { label: 'Category', key: 'category' },
       { label: 'Rating', key: 'rating' },
       { label: 'Android Version', key: 'android_version' },
@@ -151,12 +153,14 @@
 
     showStatus('#apk-create-status', 'loading', '<span class="apk-spinner"></span> ' + i18n.creating);
     $('#apk-create-btn').prop('disabled', true);
+    var targetType = $('#apk-target-type').val() || 'app';
 
     $.post(ajaxUrl, {
       action: 'appstorepro_create_app_post',
       nonce: nonce,
       app_data: JSON.stringify(currentAppData),
-      skip_existing: '1'
+      skip_existing: '1',
+      post_type: targetType
     })
     .done(function (res) {
       $('#apk-create-btn').prop('disabled', false);
@@ -196,7 +200,7 @@
     $('#apk-bulk-results').show();
     $('#apk-bulk-results-body').empty();
     $('#apk-bulk-progress-wrap').show();
-    updateProgress(0, lines.length);
+      updateProgress(0, lines.length);
 
     // Build rows
     lines.forEach(function (url, idx) {
@@ -213,6 +217,7 @@
 
     // Sequential processing
     var completed = 0;
+    var targetType = $('#apk-target-type').val() || 'app';
     function processNext(index) {
       if (index >= lines.length) {
         updateProgress(lines.length, lines.length);
@@ -241,7 +246,8 @@
               action: 'appstorepro_create_app_post',
               nonce: nonce,
               app_data: JSON.stringify(appData),
-              skip_existing: skipExisting ? '1' : '0'
+              skip_existing: skipExisting ? '1' : '0',
+              post_type: targetType
             })
             .done(function (cres) {
               completed++;
