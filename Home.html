@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="profile" href="https://gmpg.org/xfn/11">
+    
+    <!-- ═══════════════════════════════════════════════════════
+         ANTI-FLICKER: runs before first paint
+         Reads pas_theme from localStorage (set by footer.php).
+         Adds .dark-pre to <html> so critical CSS can hide flash.
+         Also restores custom colour theme variables.
+         ═══════════════════════════════════════════════════════ -->
+    
+
+    <!-- ═══════════════════════════════════════════════════════
+         CRITICAL CSS — zero-lag dark/light render
+         html.dark-pre = dark mode active before body class set
+         html.no-transition = disable all transitions on load
+         ═══════════════════════════════════════════════════════ -->
+    
+    <title>appstore &#8211; download premium game &amp; app of appstore here!</title>
+<meta name='robots' content='max-image-preview:large' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="appstore &raquo; Feed" href="https://appstore.xi0.in/feed/" />
+<link rel="alternate" type="application/rss+xml" title="appstore &raquo; Comments Feed" href="https://appstore.xi0.in/comments/feed/" />
+
+
+
+
+
+
+
+
+
+<link rel="https://api.w.org/" href="https://appstore.xi0.in/wp-json/" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://appstore.xi0.in/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.9.4" />
+<link rel="icon" href="https://appstore.xi0.in/wp-content/uploads/2026/03/cropped-download-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://appstore.xi0.in/wp-content/uploads/2026/03/cropped-download-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://appstore.xi0.in/wp-content/uploads/2026/03/cropped-download-180x180.png" />
+<meta name="msapplication-TileImage" content="https://appstore.xi0.in/wp-content/uploads/2026/03/cropped-download-270x270.png" />
+</head>
+<body class="home blog wp-theme-theme-fixed">
+
+
+<!-- Scroll progress bar -->
+<div id="pas-scroll-bar"></div>
+
+<!-- SITE HEADER -->
+<header class="site-header" id="site-header">
+    <div class="header-inner">
+
+        <!-- Logo: favicon + site name -->
+                <a href="https://appstore.xi0.in/" class="site-logo" rel="home">
+            <img
+                src="https://appstore.xi0.in/favicon.ico"
+                alt="appstore"
+                class="logo-android-img"
+                width="36"
+                height="36"
+                onerror="this.src='https://developer.android.com/static/images/brand/android-head_3D.png'"
+            />
+                        <span class="logo-text">
+                appstore                            </span>
+                    </a>
+
+        <!-- Right side: dots + toggle + search all together -->
+        <div class="header-actions">
+
+                        <!-- Colour-picker dots -->
+            <div class="theme-color-picker" role="group" aria-label="Choose theme colour">
+                                <button class="theme-dot"
+                        data-primary="#3DDC84"
+                        data-light="#6EE7AA"
+                        data-bg="#EDFCF3"
+                        style="background:#3DDC84;"
+                        title="Green"
+                        aria-label="Green theme">
+                </button>
+                                <button class="theme-dot"
+                        data-primary="#4A90E2"
+                        data-light="#72ACEA"
+                        data-bg="#EBF4FF"
+                        style="background:#4A90E2;"
+                        title="Blue"
+                        aria-label="Blue theme">
+                </button>
+                                <button class="theme-dot active"
+                        data-primary="#FF6A00"
+                        data-light="#FF8C38"
+                        data-bg="#FFF4EC"
+                        style="background:#FF6A00;"
+                        title="Orange"
+                        aria-label="Orange theme">
+                </button>
+                                <button class="theme-dot"
+                        data-primary="#9B59B6"
+                        data-light="#B07CC6"
+                        data-bg="#F5EEFF"
+                        style="background:#9B59B6;"
+                        title="Purple"
+                        aria-label="Purple theme">
+                </button>
+                                <button class="theme-dot"
+                        data-primary="#E91E8C"
+                        data-light="#F05AA9"
+                        data-bg="#FEE9F4"
+                        style="background:#E91E8C;"
+                        title="Pink"
+                        aria-label="Pink theme">
+                </button>
+                                <button class="theme-dot"
+                        data-primary="#F1C40F"
+                        data-light="#F4D03F"
+                        data-bg="#FFFBEA"
+                        style="background:#F1C40F;"
+                        title="Yellow"
+                        aria-label="Yellow theme">
+                </button>
+                            </div>
+            
+                        <!-- Dark/Light toggle -->
+            <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark / light mode">
+                <div class="dm-knob">
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </div>
+            </button>
+            
+                        <!-- Particle toggle -->
+            <button class="btn-icon" id="particle-toggle" aria-label="Toggle particles" title="Toggle particle effects">
+                <svg id="particle-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
+                    <circle cx="5"  cy="5"  r="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+                    <circle cx="19" cy="5"  r="1"   fill="currentColor" stroke="none" opacity="0.4"/>
+                    <circle cx="5"  cy="19" r="1"   fill="currentColor" stroke="none" opacity="0.4"/>
+                    <circle cx="19" cy="19" r="1.5" fill="currentColor" stroke="none" opacity="0.6"/>
+                    <circle cx="12" cy="4"  r="1"   fill="currentColor" stroke="none" opacity="0.5"/>
+                    <circle cx="20" cy="12" r="1"   fill="currentColor" stroke="none" opacity="0.5"/>
+                </svg>
+                <svg id="particle-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+                    <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none" opacity="0.3"/>
+                    <line x1="4" y1="4" x2="20" y2="20" stroke-width="2"/>
+                </svg>
+            </button>
+            
+                        <!-- Search -->
+            <button class="btn-icon" id="search-toggle" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+            </button>
+            
+        </div>
+    </div>
+
+    <!-- Search Dropdown -->
+    <div class="header-search-dropdown" id="header-search" style="display:none;">
+        <form role="search" method="get" action="https://appstore.xi0.in/">
+            <input type="search" name="s" placeholder="Search apps &amp; games..." value="" autocomplete="off" autofocus />
+            <button type="submit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+                </svg>
+            </button>
+        </form>
+    </div>
+</header>
+
+<div class="pas-ad-wrap-section"></div>
+
+<!-- =============================================
+     ANNOUNCEMENT BAR
+     ============================================= -->
+
+<!-- =============================================
+     HERO — Badge · Heading · Search · Quick-cats
+     ============================================= -->
+<section class="fp-hero">
+  <div class="fp-hero-blob fp-hero-blob1"></div>
+  <div class="fp-hero-blob fp-hero-blob2"></div>
+
+    <div class="fp-badge">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    TRUSTED MOD STORE  </div>
+  
+  <h1 class="fp-hero-title">
+    Premium mods,<br>
+    <span class="fp-hero-hl">free forever</span>
+  </h1>
+    <p class="fp-hero-sub">Ad-free apps, unlocked games &amp; unlimited resources for Android.</p>
+  
+  <!-- Search Bar -->
+  <div class="fp-search-wrap" id="fp-search-wrap">
+    <form role="search" method="get" action="https://appstore.xi0.in/" class="fp-search-form" id="fp-search-form" autocomplete="off">
+      <div class="fp-search-icon" id="fp-search-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <input type="search" name="s" id="fp-search-input" class="fp-search-input"
+        placeholder="Search your game or app…" aria-label="Search" autocomplete="off">
+            <button type="submit" class="fp-search-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+    <div class="fp-search-drop" id="fp-search-drop" aria-live="polite"></div>
+  </div>
+
+  <!-- Quick Category Tiles -->
+      <div class="fp-quick-cats" style="grid-template-columns:repeat(3,1fr);">
+        <a href="https://appstore.xi0.in/games/" class="fp-qcat">
+      <div class="fp-qcat-icon" style="background:linear-gradient(135deg,#6366F1,#818CF8);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15.5" cy="11.5" r="1.2" fill="white" stroke="none"/><circle cx="18.5" cy="11.5" r="1.2" fill="white" stroke="none"/></svg>      </div>
+      <span class="fp-qcat-name">Games</span>
+    </a>
+        <a href="https://appstore.xi0.in/app-category/" class="fp-qcat">
+      <div class="fp-qcat-icon" style="background:linear-gradient(135deg,#3B82F6,#60A5FA);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>      </div>
+      <span class="fp-qcat-name">Apps</span>
+    </a>
+        <a href="https://appstore.xi0.in/app-category/" class="fp-qcat">
+      <div class="fp-qcat-icon" style="background:linear-gradient(135deg,#F59E0B,#FBBF24);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>      </div>
+      <span class="fp-qcat-name">TV Apps</span>
+    </a>
+      </div>
+  </section>
+
+<div class="pas-ad-wrap-section"></div>
+
+
+
+
+
+<!-- =============================================
+     TRENDING SECTION
+     ============================================= -->
+
+<!-- =============================================
+     FEATURED SLIDER
+     ============================================= -->
+
+<!-- =============================================
+     POPULAR GAMES
+     ============================================= -->
+<section class="section-wrapper">
+    <div class="section-header">
+        <h2 class="section-title">Popular Games</h2>
+        <a href="https://appstore.xi0.in/games/" class="see-all-link">See all<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+    <div class="games-grid">
+                <a href="https://appstore.xi0.in/games/battlegrounds-mobile-india/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/PmrkTsvieMP34xeRjGh5EPOA7Bsk3PpPZvJTq585VffPHWgsSlLroMP2gKzmQwTF5FUXPlb7SiwVgbyUXyTKbw=w1280-h720-rw" class="game-card-img" alt="Battlegrounds Mobile India" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Battlegrounds Mobile India</div>
+                <div class="game-card-meta"><span class="game-card-version">v4.3.0</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+                <a href="https://appstore.xi0.in/games/albion-online-the-ultimate-sandbox-mmorpg-experience-for-android-users/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/7A0273he1pCGAd8f93WrTEXBeVA0-DdbFDFHfOUoZKULeHwGWwR3HVfBkvfp1shpYg=w1280-h720-rw" class="game-card-img" alt="Albion Online: The Ultimate Sandbox MMORPG Experience for Android Users" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Albion Online: The Ultimate Sandbox MMORPG Experience for Android Users</div>
+                <div class="game-card-meta"><span class="game-card-version">v1.30.050.327848</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+                <a href="https://appstore.xi0.in/games/lands-of-jail-comprehensive-prison-management-and-strategy-simulation/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/IMxlDkBmZAcKH6dXF0uNI-EVyJqO9U_O_jqaBlF0fL8c4FEuHgQru6UcPhdJPhC7Hf0LCPQw6FPz_sqnsPcPlA=w1280-h720-rw" class="game-card-img" alt="Lands of Jail: Comprehensive Prison Management and Strategy Simulation" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Lands of Jail: Comprehensive Prison Management and Strategy Simulation</div>
+                <div class="game-card-meta"><span class="game-card-version">v1.0.58</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+                <a href="https://appstore.xi0.in/games/modern-warships-naval-battles-the-ultimate-guide-to-maritime-warfare/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/G7qpCsqRFNiuaSB44RF9oh96RF0S24iA_eTyYtUW1YDTSTF7fDdIMHtrTsbGilDgDWo=w1280-h720-rw" class="game-card-img" alt="Modern Warships: Naval Battles &#8211; The Ultimate Guide to Maritime Warfare" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Modern Warships: Naval Battles &#8211; The Ultimate Guide to Maritime Warfare</div>
+                <div class="game-card-meta"><span class="game-card-version">v0.102.0.120516268</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+                <a href="https://appstore.xi0.in/games/clash-of-clans-the-definitive-guide-to-strategic-village-mastery-and-global-combat/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/4LDADIYKRY2RCthgfwpLq3VLsk9RWiSCLspFkh1_0Se2rzyxVPURgo0FK173lyDBn0E=w1280-h720-rw" class="game-card-img" alt="Clash of Clans: The Definitive Guide to Strategic Village Mastery and Global Combat" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Clash of Clans: The Definitive Guide to Strategic Village Mastery and Global Combat</div>
+                <div class="game-card-meta"><span class="game-card-version">v18.200.19</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+                <a href="https://appstore.xi0.in/games/nexus-war-civilization-the-definitive-guide-to-galactic-conquest-and-strategic-mastery/" class="game-card">
+            <img src="https://play-lh.googleusercontent.com/OpspuZXER65KwosGREkmT-35EvZBczse-kMpMtOsbUvwdGGQBOGuorjhTpvLp7VmI0c=w1280-h720-rw" class="game-card-img" alt="Nexus War: Civilization &#8211; The Definitive Guide to Galactic Conquest and Strategic Mastery" loading="lazy">
+                        <div class="game-card-overlay">
+                <div class="game-card-name">Nexus War: Civilization &#8211; The Definitive Guide to Galactic Conquest and Strategic Mastery</div>
+                <div class="game-card-meta"><span class="game-card-version">v0.2.963</span><span class="game-card-dot">&middot;</span><span class="game-card-mod">Unlimited Money</span></div>
+                <span class="game-card-cat-badge">Games</span>
+            </div>
+        </a>
+            </div>
+</section>
+<div class="section-divider"></div>
+
+<div class="pas-ad-wrap-section"></div>
+
+<!-- =============================================
+     POPULAR APPS
+     ============================================= -->
+
+<!-- =============================================
+     BROWSE CATEGORIES
+     ============================================= -->
+<section class="section-wrapper bg-gray">
+    <div class="section-header">
+        <div>
+            <div class="faq-eyebrow" style="font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);">EXPLORE</div>
+            <h2 class="section-title">Browse Categories</h2>
+        </div>
+        <a href="https://appstore.xi0.in/app-category" class="see-all-link">View All<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></a>
+    </div>
+    <div class="categories-grid">
+                <a href="https://appstore.xi0.in/app-category/app/" class="category-row pas-reveal pas-delay-1">
+            <div class="category-row-icon" style="background:#3B82F6;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">App</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/education/" class="category-row pas-reveal pas-delay-2">
+            <div class="category-row-icon" style="background:#8E44AD;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Education</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/games/" class="category-row pas-reveal pas-delay-3">
+            <div class="category-row-icon" style="background:#6366F1;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15.5" cy="11.5" r="1" fill="white" stroke="none"/><circle cx="18.5" cy="11.5" r="1" fill="white" stroke="none"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Games</div><div class="category-row-count">8 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/health-fitness/" class="category-row pas-reveal pas-delay-4">
+            <div class="category-row-icon" style="background:#EF4444;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Health &amp; Fitness</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/music-audio/" class="category-row pas-reveal pas-delay-5">
+            <div class="category-row-icon" style="background:#3B82F6;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Music &amp; Audio</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/personalization/" class="category-row pas-reveal pas-delay-6">
+            <div class="category-row-icon" style="background:#8B5CF6;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Personalization</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/photography/" class="category-row pas-reveal pas-delay-6">
+            <div class="category-row-icon" style="background:#F59E0B;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Photography</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+                <a href="https://appstore.xi0.in/app-category/productivity/" class="category-row pas-reveal pas-delay-6">
+            <div class="category-row-icon" style="background:#10B981;"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <div class="category-row-info"><div class="category-row-name">Productivity</div><div class="category-row-count">0 apps</div></div>
+            <div class="category-row-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </a>
+            </div>
+</section>
+<div class="section-divider"></div>
+
+<!-- =============================================
+     TELEGRAM CTA
+     ============================================= -->
+
+<!-- =============================================
+     LATEST UPDATES
+     ============================================= -->
+<section class="section-wrapper">
+    <div class="section-header">
+        <h2 class="section-title">Latest Updates</h2>
+        <a href="https://appstore.xi0.in/?post_type=app" class="see-all-link">View all</a>
+    </div>
+    <div class="updates-tabs">
+        <button class="update-tab active" data-tab="games">Games</button>
+        <button class="update-tab" data-tab="apps">Apps</button>
+    </div>
+    <div class="updates-grid" id="tab-games">
+                <a href="https://appstore.xi0.in/games/baseball-clash-real-time-game-comprehensive-review-and-strategy-guide/" class="upd-card">
+            <div class="upd-icon" style="background:#6366F1"><img src="https://play-lh.googleusercontent.com/EDfsym6wjcUSe8Kt3FOxbWs1mt6eEiMqlWiMnm5lgwOOh5gcHd_CVfnjBgRRcjUolZk=w512-h512-rw" alt="Baseball Clash: Real-time Game &#8211; Comprehensive Review and Strategy Guide" loading="lazy"></div>
+            <span class="upd-name">Baseball Clash: Real-time</span>
+            <span class="upd-cat" style="background:#6366F11a;color:#6366F1">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/asphalt-8-airborne-the-ultimate-high-speed-racing-experience-on-android/" class="upd-card">
+            <div class="upd-icon" style="background:#EF4444"><img src="https://play-lh.googleusercontent.com/I5a82qoBFDPVz_Mh-CsBftGFuxFCocpQ6d0x4hJRaEenrhu-a8Vs_AUo74B5I9QctDqv=w512-h512-rw" alt="Asphalt 8: Airborne &#8211; The Ultimate High-Speed Racing Experience on Android" loading="lazy"></div>
+            <span class="upd-name">Asphalt 8: Airborne</span>
+            <span class="upd-cat" style="background:#EF44441a;color:#EF4444">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/nexus-war-civilization-the-definitive-guide-to-galactic-conquest-and-strategic-mastery/" class="upd-card">
+            <div class="upd-icon" style="background:#10B981"><img src="https://play-lh.googleusercontent.com/vMBSTxsQfFe_TCP2SpO13SpdOl4quGbk06WVMFiPI6JE95rlOjbIGxpCZFFPSgELO20=w512-h512-rw" alt="Nexus War: Civilization &#8211; The Definitive Guide to Galactic Conquest and Strategic Mastery" loading="lazy"></div>
+            <span class="upd-name">Nexus War: Civilization</span>
+            <span class="upd-cat" style="background:#10B9811a;color:#10B981">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/clash-of-clans-the-definitive-guide-to-strategic-village-mastery-and-global-combat/" class="upd-card">
+            <div class="upd-icon" style="background:#F59E0B"><img src="https://play-lh.googleusercontent.com/sFmWfYbYp_2ea7VRMTnwd3gjIBrPGXHj_d_ab1_k1q1p2OMk4riGMF1vqxdhONOtTYOt_BVpk7a4AYcKU68LNGQ=w512-h512-rw" alt="Clash of Clans: The Definitive Guide to Strategic Village Mastery and Global Combat" loading="lazy"></div>
+            <span class="upd-name">Clash of Clans:</span>
+            <span class="upd-cat" style="background:#F59E0B1a;color:#F59E0B">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/modern-warships-naval-battles-the-ultimate-guide-to-maritime-warfare/" class="upd-card">
+            <div class="upd-icon" style="background:#EC4899"><img src="https://play-lh.googleusercontent.com/lcPH5Me8JgzbPlRzYaKKYjaYxCzbIBlkcmCfoWxt3APMwk2FItG_yhJf0LwrfXNeIQ=w512-h512-rw" alt="Modern Warships: Naval Battles &#8211; The Ultimate Guide to Maritime Warfare" loading="lazy"></div>
+            <span class="upd-name">Modern Warships: Naval</span>
+            <span class="upd-cat" style="background:#EC48991a;color:#EC4899">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/lands-of-jail-comprehensive-prison-management-and-strategy-simulation/" class="upd-card">
+            <div class="upd-icon" style="background:#06B6D4"><img src="https://play-lh.googleusercontent.com/Ms4UyzsEEE4kwdQb2EoAwovIFN4wOabxDtpjlD9jpnfI7WG00l3B4Ue7Katc1CbQ6vmTGNQomk1LewfY-tmPPes=w512-h512-rw" alt="Lands of Jail: Comprehensive Prison Management and Strategy Simulation" loading="lazy"></div>
+            <span class="upd-name">Lands of Jail:</span>
+            <span class="upd-cat" style="background:#06B6D41a;color:#06B6D4">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/albion-online-the-ultimate-sandbox-mmorpg-experience-for-android-users/" class="upd-card">
+            <div class="upd-icon" style="background:#8B5CF6"><img src="https://play-lh.googleusercontent.com/yALXNDwBTVSgYDv4SzKNAc0VB0JVKCxSpkQi7wetdzGhk597aasrnAuN9YNNu3Skns94=w512-h512-rw" alt="Albion Online: The Ultimate Sandbox MMORPG Experience for Android Users" loading="lazy"></div>
+            <span class="upd-name">Albion Online: The</span>
+            <span class="upd-cat" style="background:#8B5CF61a;color:#8B5CF6">Games</span>
+        </a>
+                <a href="https://appstore.xi0.in/games/battlegrounds-mobile-india/" class="upd-card">
+            <div class="upd-icon" style="background:#FF4E6A"><img src="https://play-lh.googleusercontent.com/kxRtxylq8dS_VqyMC9X_5beTfvDxP9j05X5E4OcDCPZMkF6IAc3obsEu6Apj9mmeb5B4n5qXMqjPlcRtzbkaww=w512-h512-rw" alt="Battlegrounds Mobile India" loading="lazy"></div>
+            <span class="upd-name">Battlegrounds Mobile India</span>
+            <span class="upd-cat" style="background:#FF4E6A1a;color:#FF4E6A">Games</span>
+        </a>
+            </div>
+    <div class="updates-grid" id="tab-apps" style="display:none">
+            </div>
+</section>
+<div class="section-divider"></div>
+
+<div class="pas-ad-wrap-section"></div>
+
+<!-- =============================================
+     FAQ
+     ============================================= -->
+<section class="faq-section">
+    <div class="faq-eyebrow">WHY USERS TRUST US</div>
+    <h2 class="faq-main-title">Frequently asked questions</h2>
+    <div class="faq-list">
+                <div class="faq-card">
+            <div class="faq-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="faq-content">
+                <div class="faq-question">Is this site safe?</div>
+                <div class="faq-answer">Every upload is scanned and reviewed before publishing. We remove unnecessary permissions and only keep files that pass our checks.</div>
+            </div>
+        </div>
+                <div class="faq-card">
+            <div class="faq-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="faq-content">
+                <div class="faq-question">Do I have to pay?</div>
+                <div class="faq-answer">No. Free to use. Browse, download and update mods without any subscription or login.</div>
+            </div>
+        </div>
+                <div class="faq-card">
+            <div class="faq-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="faq-content">
+                <div class="faq-question">How do I install mods?</div>
+                <div class="faq-answer">Download the APK, enable installs from unknown sources, then open the file and follow the prompts.</div>
+            </div>
+        </div>
+            </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+    <!-- Top row: logo + tagline -->
+    <div class="footer-top">
+        <a href="https://appstore.xi0.in/" class="footer-brand">
+            <img
+                src="https://appstore.xi0.in/favicon.ico"
+                alt="appstore"
+                class="footer-favicon"
+                width="32" height="32"
+                onerror="this.style.display='none'"
+            />
+            <span class="footer-brand-name">appstore</span>
+        </a>
+        <p class="footer-tagline">Premium mods, free forever.</p>
+    </div>
+
+    <!-- Divider -->
+    <div class="footer-divider"></div>
+
+    <!-- Nav links in two rows -->
+    <nav class="footer-nav">
+        <a href="https://appstore.xi0.in/">Home</a>
+        <a href="https://appstore.xi0.in/?post_type=app">Apps</a>
+        <a href="https://appstore.xi0.in/games/">Games</a>
+        <a href="https://appstore.xi0.in/app-category">Categories</a>
+                        <a href="https://appstore.xi0.in/about/">About</a>        <a href="https://appstore.xi0.in/contact/">Contact</a>        <a href="https://appstore.xi0.in/privacy-policy/">Privacy</a>        <a href="https://appstore.xi0.in/terms/">Terms</a>        <a href="https://appstore.xi0.in/dmca/">DMCA</a>    </nav>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+        <p class="footer-copy">&copy; 2026 appstore. All rights reserved.</p>
+        <p class="footer-disclaimer">For educational purposes only.</p>
+    </div>
+
+</footer>
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav" role="navigation" aria-label="Mobile Navigation">
+    <a href="https://appstore.xi0.in/" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+    </a>
+        <a href="https://appstore.xi0.in/app-category" class="nav-item ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        <span>Category</span>
+    </a>
+    <a href="https://appstore.xi0.in/?post_type=app" class="nav-item ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        <span>Apps</span>
+    </a>
+    <a href="https://appstore.xi0.in/games/" class="nav-item ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/>
+            <circle cx="15" cy="10" r="1" fill="currentColor"/><circle cx="17" cy="12" r="1" fill="currentColor"/>
+            <path d="M3 6h18a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/>
+        </svg>
+        <span>Games</span>
+    </a>
+    <a href="#menu" class="nav-item" id="menu-toggle-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <span>Menu</span>
+    </a>
+</nav>
+
+<!-- SLIDE-UP MENU PANEL -->
+<div class="slide-menu" id="slide-menu" style="display:none;">
+    <div class="slide-menu-overlay" id="slide-menu-overlay"></div>
+    <div class="slide-menu-panel">
+
+        <!-- Header -->
+        <div class="slide-menu-header">
+            <span style="font-family:var(--font-display);font-weight:800;font-size:18px;">Menu</span>
+            <button class="slide-menu-close" id="slide-menu-close">&#x2715;</button>
+        </div>
+
+        <!-- ── Appearance switcher ── -->
+        <div class="sm-section">
+            <div class="sm-section-label">Appearance</div>
+            <div class="sm-theme-btns">
+                <button class="sm-theme-btn" id="sm-theme-light" onclick="pasSetTheme('light')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <span>Light</span>
+                </button>
+                <button class="sm-theme-btn" id="sm-theme-dark" onclick="pasSetTheme('dark')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    <span>Dark</span>
+                </button>
+                <button class="sm-theme-btn" id="sm-theme-system" onclick="pasSetTheme('system')">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    <span>System</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="sm-divider"></div>
+
+        <!-- ── Navigation ── -->
+        <nav class="sm-nav">
+            <a href="https://appstore.xi0.in/" class="sm-nav-item sm-nav-active">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                Home            </a>
+            <a href="https://appstore.xi0.in/?post_type=app" class="sm-nav-item ">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2.5"/></svg></span>
+                All Apps            </a>
+            <a href="https://appstore.xi0.in/games/" class="sm-nav-item ">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor" stroke="none"/><circle cx="18.5" cy="11.5" r="1" fill="currentColor" stroke="none"/></svg></span>
+                Games            </a>
+            <a href="https://appstore.xi0.in/app-category" class="sm-nav-item ">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></span>
+                Categories            </a>
+        </nav>
+
+        <div class="sm-divider"></div>
+
+        <!-- ── Pages ── -->
+        <nav class="sm-nav">
+                                    <a href="https://appstore.xi0.in/about/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2.5"/></svg></span>
+                About Us            </a>
+                                    <a href="https://appstore.xi0.in/contact/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+                Contact            </a>
+                                </nav>
+
+        <div class="sm-divider"></div>
+
+        <!-- ── Legal ── -->
+        <nav class="sm-nav sm-nav-legal">
+                        <a href="https://appstore.xi0.in/dmca/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                DMCA            </a>
+                                    <a href="https://appstore.xi0.in/disclaimer/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                Disclaimer            </a>
+                                    <a href="https://appstore.xi0.in/privacy-policy/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                Privacy Policy            </a>
+                                    <a href="https://appstore.xi0.in/terms/" class="sm-nav-item">
+                <span class="sm-nav-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+                Terms of Use            </a>
+                    </nav>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
