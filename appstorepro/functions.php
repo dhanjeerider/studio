@@ -68,6 +68,7 @@ require get_template_directory() . '/inc/meta-boxes.php';
 require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/template-tags.php';
 require get_template_directory() . '/inc/enqueue.php';
+require get_template_directory() . '/inc/apk-extractor.php';
 
 // Content width
 if ( ! isset( $content_width ) ) {
