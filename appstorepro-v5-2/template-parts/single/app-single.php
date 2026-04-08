@@ -11,13 +11,50 @@ $rating          = $rating_raw ? number_format( (float) $rating_raw, 1, '.', '' 
 $android_ver     = aspv5_get_app_meta( $post_id, '_app_android_version' );
 $download_url    = aspv5_get_app_meta( $post_id, '_app_download_url' );
 $play_store_url  = aspv5_get_app_meta( $post_id, '_app_play_store_url' );
-$telegram_url    = aspv5_get_app_meta( $post_id, '_app_telegram_url' );
-$tg_members      = aspv5_get_app_meta( $post_id, '_app_telegram_members' );
+$telegram_url    = get_theme_mod( 'aspv5_social_telegram', aspv5_get_app_meta( $post_id, '_app_telegram_url' ) );
+$tg_members      = get_theme_mod( 'aspv5_social_telegram_status', aspv5_get_app_meta( $post_id, '_app_telegram_members' ) );
 $youtube_url     = aspv5_get_app_meta( $post_id, '_app_youtube_url' );
 $is_mod          = aspv5_get_app_meta( $post_id, '_app_is_mod' );
 $mod_info        = aspv5_get_app_meta( $post_id, '_app_mod_info' );
 $downloads_raw   = aspv5_get_app_meta( $post_id, '_app_downloads' );
 $downloads       = aspv5_format_downloads( $downloads_raw );
+$extra_downloads_raw = aspv5_get_app_meta( $post_id, '_app_extra_downloads' );
+$extra_downloads = [];
+if ( $extra_downloads_raw ) {
+	foreach ( preg_split( '/\r?\n/', $extra_downloads_raw ) as $download_line ) {
+		$download_line = trim( $download_line );
+		if ( '' === $download_line ) {
+			continue;
+		}
+
+		$label = '';
+		$url   = '';
+
+		if ( false !== strpos( $download_line, '|' ) ) {
+			list( $label, $url ) = array_map( 'trim', explode( '|', $download_line, 2 ) );
+		} elseif ( preg_match( '#^(https?://\S+)\s*[-:]\s*(.+)$#', $download_line, $match ) ) {
+			$url   = trim( $match[1] );
+			$label = trim( $match[2] );
+		} else {
+			$url = $download_line;
+		}
+
+		$url = esc_url_raw( $url );
+		if ( ! $url ) {
+			continue;
+		}
+
+		if ( '' === $label ) {
+			$label = basename( wp_parse_url( $url, PHP_URL_PATH ) ?: '' );
+			$label = $label ? preg_replace( '/\.(apk|zip|xapk|apkm)$/i', '', $label ) : __( 'Old Version', 'aspv5' );
+		}
+
+		$extra_downloads[] = [
+			'label' => sanitize_text_field( $label ),
+			'url'   => $url,
+		];
+	}
+}
 $screenshots_raw = aspv5_get_app_meta( $post_id, '_app_screenshots' );
 $screenshots     = $screenshots_raw ? array_filter( array_map( 'trim', explode( "\n", $screenshots_raw ) ) ) : [];
 $screenshots     = array_values( array_filter( $screenshots, static function( $url ) use ( $icon_url ) {
@@ -70,7 +107,25 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 		<?php else : ?>
 			<div class="absolute inset-0 bg-gradient-to-br from-[color:var(--asp-primary)] to-orange-600 opacity-80"></div>
 		<?php endif; ?>
-		<div class="absolute inset-0 bg-gradient-to-b from-black/10 via-black/30 to-black/75"></div>
+		<div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/45 to-black/80"></div>
+
+		<div class="absolute top-0 left-0 right-0 z-10">
+			<div class="max-w-6xl mx-auto px-4 pt-4 sm:pt-5">
+				<nav class="inline-flex max-w-full items-center gap-2 rounded-xl bg-black/30 text-white/90 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-xs font-medium" aria-label="<?php esc_attr_e( 'Breadcrumb', 'aspv5' ); ?>">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-white transition-colors"><?php esc_html_e( 'Home', 'aspv5' ); ?></a>
+					<span class="text-white/60">/</span>
+					<?php if ( get_post_type_archive_link( get_post_type() ) ) : ?>
+						<a href="<?php echo esc_url( get_post_type_archive_link( get_post_type() ) ); ?>" class="hover:text-white transition-colors"><?php echo esc_html( get_post_type() === 'game' ? __( 'Games', 'aspv5' ) : __( 'Apps', 'aspv5' ) ); ?></a>
+						<span class="text-white/60">/</span>
+					<?php endif; ?>
+					<?php if ( $cat_name && $cat_link ) : ?>
+						<a href="<?php echo esc_url( $cat_link ); ?>" class="hover:text-white transition-colors truncate max-w-[120px] sm:max-w-[180px]"><?php echo esc_html( $cat_name ); ?></a>
+						<span class="text-white/60">/</span>
+					<?php endif; ?>
+					<span class="text-white truncate max-w-[140px] sm:max-w-[260px]"><?php echo esc_html( get_the_title() ); ?></span>
+				</nav>
+			</div>
+		</div>
 		<div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[120%] h-40 bg-white dark:bg-gray-950 rounded-[100%]"></div>
 	</div>
 
@@ -145,7 +200,7 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 					<div class="flex gap-3 mt-4 flex-wrap">
 						<?php if ( $download_url ) : ?>
 							<a href="<?php echo esc_url( $download_url ); ?>"
-							   class="flex-1 min-w-[140px] inline-flex items-center justify-center gap-2 bg-[color:var(--asp-primary)] hover:opacity-90 text-white font-bold px-5 py-3 rounded-2xl text-sm transition-opacity shadow-lg shadow-[color:var(--asp-primary)]/30"
+							   class="flex-1 min-w-[210px] inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-3.5 rounded-2xl text-base transition-colors shadow-lg shadow-emerald-700/30"
 							   rel="nofollow noopener" target="_blank">
 								<i class="bx bxs-download text-base"></i>
 								<?php esc_html_e( 'Download APK', 'aspv5' ); ?>
@@ -160,6 +215,24 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 							<i class="bx bx-share-alt text-lg"></i>
 						</button>
 					</div>
+
+					<?php if ( $extra_downloads ) : ?>
+						<details class="mt-3 sa-download-accordion rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden bg-gray-50 dark:bg-gray-800/50">
+							<summary class="list-none cursor-pointer flex items-center justify-between gap-3 px-4 py-3 font-semibold text-sm text-gray-800 dark:text-gray-200">
+								<span><?php esc_html_e( 'More Downloads / Old Versions', 'aspv5' ); ?></span>
+								<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="sa-download-arrow w-4 h-4 text-gray-400 transition-transform"><polyline points="6 9 12 15 18 9"/></svg>
+							</summary>
+							<div class="px-4 pb-4 grid gap-2">
+								<?php foreach ( $extra_downloads as $extra_download ) : ?>
+									<a href="<?php echo esc_url( $extra_download['url'] ); ?>" target="_blank" rel="nofollow noopener"
+									   class="inline-flex items-center justify-between gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 px-4 py-3 text-sm font-semibold text-gray-800 dark:text-gray-100 hover:border-[color:var(--asp-primary)] hover:text-[color:var(--asp-primary)] transition-colors">
+										<span><?php echo esc_html( $extra_download['label'] ); ?></span>
+										<i class="bx bx-download text-base opacity-80"></i>
+									</a>
+								<?php endforeach; ?>
+							</div>
+						</details>
+					<?php endif; ?>
 
 				</div>
 			</div>
@@ -203,7 +276,7 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 				<div class="flex-1 min-w-0">
 					<h3 class="font-semibold text-gray-900 dark:text-white text-sm"><?php esc_html_e( 'Join our Telegram', 'aspv5' ); ?></h3>
 					<?php if ( $tg_members ) : ?>
-						<p class="text-xs text-gray-500 dark:text-gray-400"><?php echo esc_html( $tg_members ); ?> <?php esc_html_e( 'members', 'aspv5' ); ?></p>
+						<p class="text-xs text-gray-500 dark:text-gray-400"><?php echo esc_html( $tg_members ); ?></p>
 					<?php endif; ?>
 				</div>
 				<a href="<?php echo esc_url( $telegram_url ); ?>"
@@ -403,7 +476,7 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 			<?php endif; ?>
 		</div>
 		<a href="<?php echo esc_url( $download_url ); ?>"
-		   class="flex-shrink-0 bg-[color:var(--asp-primary)] hover:opacity-90 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-opacity"
+		   class="flex-shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors"
 		   rel="nofollow noopener" target="_blank">
 			<?php esc_html_e( 'GET', 'aspv5' ); ?>
 		</a>

@@ -195,9 +195,15 @@ function aspv5_customize_register( $wp_customize ) {
 	] );
 	$wp_customize->add_setting( 'aspv5_social_telegram', [ 'default' => '', 'sanitize_callback' => 'esc_url_raw' ] );
 	$wp_customize->add_control( 'aspv5_social_telegram', [
-		'label'   => __( 'Telegram URL', 'aspv5' ),
+		'label'   => __( 'Telegram Channel URL', 'aspv5' ),
 		'section' => 'aspv5_social',
 		'type'    => 'url',
+	] );
+	$wp_customize->add_setting( 'aspv5_social_telegram_status', [ 'default' => '', 'sanitize_callback' => 'sanitize_text_field' ] );
+	$wp_customize->add_control( 'aspv5_social_telegram_status', [
+		'label'   => __( 'Telegram Status / Members Text', 'aspv5' ),
+		'section' => 'aspv5_social',
+		'type'    => 'text',
 	] );
 	$wp_customize->add_setting( 'aspv5_social_youtube', [ 'default' => '', 'sanitize_callback' => 'esc_url_raw' ] );
 	$wp_customize->add_control( 'aspv5_social_youtube', [

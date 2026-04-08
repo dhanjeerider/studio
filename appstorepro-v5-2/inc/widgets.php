@@ -294,6 +294,7 @@ function aspv5_register_widgets() {
 	register_widget( 'ASPV5_Stats_Widget' );
 	register_widget( 'ASPV5_Popular_Categories_Widget' );
 	register_widget( 'ASPV5_Recent_Apps_Ticker_Widget' );
+	register_widget( 'ASPV5_Telegram_Widget' );
 }
 add_action( 'widgets_init', 'aspv5_register_widgets' );
 
@@ -640,6 +641,75 @@ class ASPV5_Recent_Apps_Ticker_Widget extends WP_Widget {
 		$instance['count']     = absint( $new_instance['count'] );
 		$instance['post_type'] = in_array( $new_instance['post_type'], [ 'app', 'game' ], true ) ? $new_instance['post_type'] : 'app';
 		$instance['orderby']   = in_array( $new_instance['orderby'], [ 'date', 'modified', 'rand', 'comment_count' ], true ) ? $new_instance['orderby'] : 'date';
+		return $instance;
+	}
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// WIDGET: Telegram CTA
+// ═══════════════════════════════════════════════════════════════════════════════
+class ASPV5_Telegram_Widget extends WP_Widget {
+
+	public function __construct() {
+		parent::__construct(
+			'aspv5_telegram_widget',
+			__( 'AppStore V5: Telegram CTA', 'aspv5' ),
+			[
+				'description' => __( 'Displays the global Telegram channel link and status from Customizer settings.', 'aspv5' ),
+				'classname'   => 'aspv5-telegram-widget',
+			]
+		);
+	}
+
+	public function widget( $args, $instance ) {
+		$title          = ! empty( $instance['title'] ) ? $instance['title'] : '';
+		$telegram_url   = get_theme_mod( 'aspv5_social_telegram', get_theme_mod( 'aspv5_footer_telegram_url', '' ) );
+		$telegram_state = get_theme_mod( 'aspv5_social_telegram_status', get_theme_mod( 'aspv5_footer_telegram_members', '' ) );
+
+		if ( ! $telegram_url ) {
+			return;
+		}
+
+		echo wp_kses_post( $args['before_widget'] );
+		if ( $title ) {
+			echo wp_kses_post( $args['before_title'] ) . esc_html( apply_filters( 'widget_title', $title ) ) . wp_kses_post( $args['after_title'] );
+		}
+		?>
+		<div class="flex items-center gap-3 bg-[#0088cc]/10 dark:bg-[#0088cc]/10 border border-[#0088cc]/20 rounded-2xl p-4">
+			<div class="w-12 h-12 rounded-full bg-[#0088cc]/20 flex items-center justify-center flex-shrink-0 text-[#0088cc]">
+				<i class="bx bxl-telegram text-2xl"></i>
+			</div>
+			<div class="flex-1 min-w-0">
+				<h3 class="font-semibold text-gray-900 dark:text-white text-sm"><?php echo esc_html( $title ?: __( 'Join our Telegram', 'aspv5' ) ); ?></h3>
+				<?php if ( $telegram_state ) : ?>
+					<p class="text-xs text-gray-500 dark:text-gray-400"><?php echo esc_html( $telegram_state ); ?></p>
+				<?php endif; ?>
+			</div>
+			<a href="<?php echo esc_url( $telegram_url ); ?>"
+			   class="flex-shrink-0 bg-[#0088cc] hover:bg-[#006da8] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors"
+			   target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Join', 'aspv5' ); ?>
+			</a>
+		</div>
+		<?php
+		echo wp_kses_post( $args['after_widget'] );
+	}
+
+	public function form( $instance ) {
+		$title = $instance['title'] ?? __( 'Join our Telegram', 'aspv5' );
+		?>
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'aspv5' ); ?></label>
+			<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"
+			       name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>"
+			       type="text" value="<?php echo esc_attr( $title ); ?>">
+		</p>
+		<?php
+	}
+
+	public function update( $new_instance, $old_instance ) {
+		$instance          = [];
+		$instance['title'] = sanitize_text_field( $new_instance['title'] );
 		return $instance;
 	}
 }

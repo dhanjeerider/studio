@@ -1,9 +1,9 @@
 <?php
 // template-parts/global/footer-content.php — AppStore Pro V5
 $footer_text  = get_theme_mod( 'aspv5_footer_text', '&copy; ' . gmdate( 'Y' ) . ' AppStore Pro V5. All rights reserved.' );
-$telegram_url = get_theme_mod( 'aspv5_social_telegram', '' );
+$telegram_url = get_theme_mod( 'aspv5_social_telegram', get_theme_mod( 'aspv5_footer_telegram_url', '' ) );
+$telegram_status = get_theme_mod( 'aspv5_social_telegram_status', get_theme_mod( 'aspv5_footer_telegram_members', '' ) );
 $youtube_url  = get_theme_mod( 'aspv5_social_youtube', '' );
-$tg_members   = get_theme_mod( 'aspv5_footer_telegram_members', '' );
 $footer_menu_location = has_nav_menu( 'footer-menu' ) ? 'footer-menu' : '';
 $footer_ad_code = get_theme_mod( 'aspv5_ad_footer', '' );
 ?>
@@ -33,7 +33,7 @@ $footer_ad_code = get_theme_mod( 'aspv5_ad_footer', '' );
 						   class="flex items-center gap-1.5 bg-[#0088cc]/20 hover:bg-[#0088cc]/40 text-[#0088cc] px-3 py-1.5 rounded-full text-xs font-semibold transition-colors"
 						   target="_blank" rel="noopener noreferrer">
 							<svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-2.025 9.546c-.152.667-.548.833-1.112.518l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.215-3.053 5.56-5.023c.242-.215-.052-.334-.373-.119L6.74 14.377 3.8 13.46c-.66-.205-.673-.66.138-.978l10.89-4.197c.548-.198 1.028.134.734.963z"/></svg>
-							<?php echo $tg_members ? esc_html( $tg_members ) . ' ' . esc_html__( 'members', 'aspv5' ) : esc_html__( 'Telegram', 'aspv5' ); ?>
+							<?php echo $telegram_status ? esc_html( $telegram_status ) : esc_html__( 'Telegram', 'aspv5' ); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ( $youtube_url ) : ?>

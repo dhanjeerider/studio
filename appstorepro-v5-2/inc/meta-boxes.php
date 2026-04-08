@@ -28,8 +28,6 @@ function aspv5_app_details_callback( $post ) {
 		[ 'key' => '_app_rating',           'label' => 'Rating (e.g. 4.5)',          'type' => 'text' ],
 		[ 'key' => '_app_android_version',  'label' => 'Min Android Version',        'type' => 'text' ],
 		[ 'key' => '_app_hero_image_url',   'label' => 'Hero/Banner Image URL',      'type' => 'url' ],
-		[ 'key' => '_app_telegram_url',     'label' => 'Telegram Channel URL',       'type' => 'url' ],
-		[ 'key' => '_app_telegram_members', 'label' => 'Telegram Members Count',     'type' => 'text' ],
 		[ 'key' => '_app_youtube_url',      'label' => 'YouTube Tutorial URL',       'type' => 'url' ],
 		[ 'key' => '_app_mod_info',         'label' => 'MOD Info',                   'type' => 'text' ],
 	];
@@ -71,6 +69,13 @@ function aspv5_app_details_callback( $post ) {
 	echo '<td><textarea id="app_screenshots" name="_app_screenshots" rows="5" class="large-text">' . esc_textarea( $screenshots ) . '</textarea></td>';
 	echo '</tr>';
 
+	// Additional download buttons textarea
+	$extra_downloads = get_post_meta( $post->ID, '_app_extra_downloads', true );
+	echo '<tr>';
+	echo '<th><label for="app_extra_downloads">' . esc_html__( 'Extra Download Buttons', 'aspv5' ) . '</label></th>';
+	echo '<td><textarea id="app_extra_downloads" name="_app_extra_downloads" rows="5" class="large-text" placeholder="Old Version 1 | https://example.com/old-version.apk\nOld Version 2 | https://example.com/old-version-2.apk">' . esc_textarea( $extra_downloads ) . '</textarea><p class="description">' . esc_html__( 'One per line. Use Label | URL.', 'aspv5' ) . '</p></td>';
+	echo '</tr>';
+
 	// Category icon select
 	$cat_icon = get_post_meta( $post->ID, '_app_category_icon', true );
 	echo '<tr>';
@@ -108,13 +113,14 @@ function aspv5_save_app_meta( $post_id ) {
 
 	$text_fields = [
 		'_app_version', '_app_size', '_app_developer', '_app_rating',
-		'_app_android_version', '_app_telegram_members', '_app_mod_info', '_app_category_icon',
+		'_app_android_version', '_app_mod_info', '_app_category_icon',
 		'_app_package', '_app_downloads',
 	];
 	$url_fields = [
 		'_app_icon_url', '_app_download_url', '_app_play_store_url',
-		'_app_hero_image_url', '_app_telegram_url', '_app_youtube_url',
+		'_app_hero_image_url', '_app_youtube_url',
 	];
+	$textarea_fields = [ '_app_screenshots', '_app_extra_downloads' ];
 
 	foreach ( $text_fields as $field ) {
 		if ( isset( $_POST[ $field ] ) ) {
@@ -128,8 +134,10 @@ function aspv5_save_app_meta( $post_id ) {
 		}
 	}
 
-	if ( isset( $_POST['_app_screenshots'] ) ) {
-		update_post_meta( $post_id, '_app_screenshots', sanitize_textarea_field( wp_unslash( $_POST['_app_screenshots'] ) ) );
+	foreach ( $textarea_fields as $field ) {
+		if ( isset( $_POST[ $field ] ) ) {
+			update_post_meta( $post_id, $field, sanitize_textarea_field( wp_unslash( $_POST[ $field ] ) ) );
+		}
 	}
 
 	$is_mod = isset( $_POST['_app_is_mod'] ) ? '1' : '0';

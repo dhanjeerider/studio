@@ -149,6 +149,17 @@ body { overflow-x: hidden; }
   border-radius: 3px;
 }
 
+/* ── Download accordion ────────────────────────────────────────────────── */
+.sa-download-accordion > summary {
+  list-style: none;
+}
+.sa-download-accordion > summary::-webkit-details-marker {
+  display: none;
+}
+.sa-download-accordion[open] .sa-download-arrow {
+  transform: rotate(180deg);
+}
+
 /* ── Reveal animation ───────────────────────────────────────────────────── */
 .aspv5-reveal {
   opacity: 0;
