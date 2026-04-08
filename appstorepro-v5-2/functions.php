@@ -89,3 +89,16 @@ add_action( 'after_switch_theme', 'aspv5_flush_rewrite_on_switch' );
 if ( ! isset( $content_width ) ) {
 	$content_width = 1200;
 }
+
+// Ensure app/game archives and taxonomy pages show at least 20 posts per page.
+function aspv5_archive_posts_per_page( $query ) {
+	if ( is_admin() || ! $query->is_main_query() ) {
+		return;
+	}
+	if ( $query->is_post_type_archive( [ 'app', 'game' ] ) || $query->is_tax( 'app-category' ) || $query->is_search() ) {
+		if ( ! $query->get( 'posts_per_page' ) || (int) $query->get( 'posts_per_page' ) < 2 ) {
+			$query->set( 'posts_per_page', 20 );
+		}
+	}
+}
+add_action( 'pre_get_posts', 'aspv5_archive_posts_per_page' );

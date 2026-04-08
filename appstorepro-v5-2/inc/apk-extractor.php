@@ -367,18 +367,56 @@ function appstorepro_ajax_create_app_post() {
 }
 add_action( 'wp_ajax_appstorepro_create_app_post', 'appstorepro_ajax_create_app_post' );
 
-// ── Scrape Play Store page ───────────────────────────────────────────────────
-function appstorepro_fetch_playstore_data( $url ) {
-	$url = add_query_arg( 'hl', 'en', $url );
-
-	$response = wp_remote_get( $url, [
-		'timeout'    => 20,
+// ── Proxy-aware HTTP fetch ───────────────────────────────────────────────────
+/**
+ * Fetch a URL, falling back to the HTML proxy when the direct request is
+ * blocked (HTTP 403/429/503 or a network error). The proxy at
+ * https://mag.dhanjeerider.workers.dev/?url=<encoded-url> returns the
+ * original page's HTML so that protected sites can still be scraped.
+ *
+ * @param string $url     The target URL.
+ * @param array  $args    wp_remote_get() args (optional).
+ * @return array|WP_Error wp_remote_get() response array or WP_Error.
+ */
+function aspv5_fetch_with_proxy( $url, $args = [] ) {
+	$default_args = [
+		'timeout'    => 25,
 		'user-agent' => 'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/Mobile Safari/537.36',
 		'headers'    => [
 			'Accept-Language' => 'en-US,en;q=0.9',
 			'Accept'          => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 		],
-	] );
+	];
+	$args = wp_parse_args( $args, $default_args );
+
+	$response = wp_remote_get( $url, $args );
+
+	// Determine if we should fall back to the proxy.
+	$needs_proxy = false;
+	if ( is_wp_error( $response ) ) {
+		$needs_proxy = true;
+	} else {
+		$code = (int) wp_remote_retrieve_response_code( $response );
+		if ( in_array( $code, [ 403, 429, 503, 0 ], true ) ) {
+			$needs_proxy = true;
+		}
+	}
+
+	if ( $needs_proxy ) {
+		$proxy_url  = 'https://mag.dhanjeerider.workers.dev/?url=' . rawurlencode( $url );
+		$proxy_args = $args;
+		$proxy_args['timeout'] = 30;
+		$response   = wp_remote_get( $proxy_url, $proxy_args );
+	}
+
+	return $response;
+}
+
+// ── Scrape Play Store page ───────────────────────────────────────────────────
+function appstorepro_fetch_playstore_data( $url ) {
+	$url = add_query_arg( 'hl', 'en', $url );
+
+	$response = aspv5_fetch_with_proxy( $url );
 
 	if ( is_wp_error( $response ) ) {
 		return new WP_Error( 'fetch_failed', sprintf(
@@ -622,14 +660,8 @@ function appstorepro_sideload_image( $icon_url, $post_id ) {
  * @return array|WP_Error Parsed app data on success, or WP_Error on failure.
  */
 function appstorepro_fetch_liteapks_data( $url ) {
-    // Fetch the page.
-    $response = wp_remote_get( $url, [
-        'timeout'    => 20,
-        'user-agent' => 'Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/Mobile Safari/537.36',
-        'headers'    => [
-            'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        ],
-    ] );
+    // Fetch the page, falling back to proxy on 403/block.
+    $response = aspv5_fetch_with_proxy( $url );
     if ( is_wp_error( $response ) ) {
         return new WP_Error( 'fetch_failed', sprintf( __( 'Failed to fetch LiteAPKs page: %s', 'aspv5' ), $response->get_error_message() ) );
     }
@@ -786,13 +818,12 @@ function appstorepro_fetch_liteapks_data( $url ) {
  * @return array|WP_Error Parsed app data on success, or WP_Error on failure.
  */
 function appstorepro_fetch_generic_data( $url ) {
-	// Fetch the page
-	$response = wp_remote_get( $url, [
-		'timeout'             => 30,
-		'redirection'        => 5,
-		'httpversion'        => '1.0',
-		'user-agent'         => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-		'sslverify'          => true,
+	// Fetch the page, falling back to proxy on 403/block.
+	$response = aspv5_fetch_with_proxy( $url, [
+		'timeout'     => 30,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'sslverify'   => true,
 	] );
 
 	if ( is_wp_error( $response ) ) {
