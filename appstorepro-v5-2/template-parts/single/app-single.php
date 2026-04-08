@@ -18,6 +18,7 @@ $is_mod          = aspv5_get_app_meta( $post_id, '_app_is_mod' );
 $mod_info        = aspv5_get_app_meta( $post_id, '_app_mod_info' );
 $downloads_raw   = aspv5_get_app_meta( $post_id, '_app_downloads' );
 $downloads       = aspv5_format_downloads( $downloads_raw );
+$short_summary   = wp_trim_words( wp_strip_all_tags( get_the_excerpt() ? get_the_excerpt() : get_the_content() ), 20 );
 $extra_downloads_raw = aspv5_get_app_meta( $post_id, '_app_extra_downloads' );
 $extra_downloads = [];
 if ( $extra_downloads_raw ) {
@@ -89,7 +90,7 @@ $quick_stats     = array_filter( [
 $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 ?>
 
-<article id="post-<?php the_ID(); ?>" <?php post_class( 'pb-20 sa-single-shell' ); ?>>
+<article id="post-<?php the_ID(); ?>" <?php post_class( 'pb-20 sa-single-shell bg-gray-900 text-gray-200' ); ?>>
 
 	<!-- ── Hero Banner ── -->
 	<div class="relative bg-gray-900 overflow-hidden"
@@ -109,33 +110,49 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 		<?php endif; ?>
 		<div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/45 to-black/80"></div>
 
-		<div class="absolute top-0 left-0 right-0 z-10">
-			<div class="max-w-6xl mx-auto px-4 pt-4 sm:pt-5">
-				<nav class="inline-flex max-w-full items-center gap-2 rounded-xl bg-black/30 text-white/90 backdrop-blur-sm px-3 py-1.5 text-[11px] sm:text-xs font-medium" aria-label="<?php esc_attr_e( 'Breadcrumb', 'aspv5' ); ?>">
-					<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-white transition-colors"><?php esc_html_e( 'Home', 'aspv5' ); ?></a>
-					<span class="text-white/60">/</span>
-					<?php if ( get_post_type_archive_link( get_post_type() ) ) : ?>
-						<a href="<?php echo esc_url( get_post_type_archive_link( get_post_type() ) ); ?>" class="hover:text-white transition-colors"><?php echo esc_html( get_post_type() === 'game' ? __( 'Games', 'aspv5' ) : __( 'Apps', 'aspv5' ) ); ?></a>
-						<span class="text-white/60">/</span>
-					<?php endif; ?>
-					<?php if ( $cat_name && $cat_link ) : ?>
-						<a href="<?php echo esc_url( $cat_link ); ?>" class="hover:text-white transition-colors truncate max-w-[120px] sm:max-w-[180px]"><?php echo esc_html( $cat_name ); ?></a>
-						<span class="text-white/60">/</span>
-					<?php endif; ?>
-					<span class="text-white truncate max-w-[140px] sm:max-w-[260px]"><?php echo esc_html( get_the_title() ); ?></span>
-				</nav>
+		<div class="absolute inset-x-0 bottom-0 z-10">
+			<div class="max-w-6xl mx-auto px-4 pb-4">
+				<div class="bg-red-500/95 text-white rounded-xl p-4 sm:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+					<div class="flex items-center gap-4 min-w-0">
+						<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-white/60 flex-shrink-0 bg-white/20">
+							<?php if ( $icon_src ) : ?>
+								<img src="<?php echo esc_url( $icon_src ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="w-full h-full object-cover" loading="eager">
+							<?php endif; ?>
+						</div>
+						<div class="min-w-0">
+							<h1 class="text-xl sm:text-3xl font-bold leading-tight text-white truncate sm:whitespace-normal"><?php echo esc_html( get_the_title() ); ?></h1>
+							<?php if ( $developer ) : ?>
+								<p class="text-white/90 text-sm mt-1"><?php echo esc_html( $developer ); ?></p>
+							<?php endif; ?>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[120%] h-40 bg-white dark:bg-gray-950 rounded-[100%]"></div>
+	</div>
+
+	<!-- ── Breadcrumb ── -->
+	<div class="max-w-6xl mx-auto px-4 py-4 text-green-400 text-sm">
+		<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hover:text-green-300"><?php esc_html_e( 'Home', 'aspv5' ); ?></a>
+		<span class="mx-1 text-gray-500">&gt;</span>
+		<?php if ( get_post_type_archive_link( get_post_type() ) ) : ?>
+			<a href="<?php echo esc_url( get_post_type_archive_link( get_post_type() ) ); ?>" class="hover:text-green-300"><?php echo esc_html( get_post_type() === 'game' ? __( 'Games', 'aspv5' ) : __( 'Apps', 'aspv5' ) ); ?></a>
+			<span class="mx-1 text-gray-500">&gt;</span>
+		<?php endif; ?>
+		<?php if ( $cat_name && $cat_link ) : ?>
+			<a href="<?php echo esc_url( $cat_link ); ?>" class="hover:text-green-300"><?php echo esc_html( $cat_name ); ?></a>
+			<span class="mx-1 text-gray-500">&gt;</span>
+		<?php endif; ?>
+		<span class="text-orange-400"><?php echo esc_html( get_the_title() ); ?></span>
 	</div>
 
 	<!-- ── App Info Card ── -->
 	<div class="max-w-6xl mx-auto px-4">
-		<div class="relative -mt-20 mb-6">
-			<div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur rounded-3xl shadow-xl p-5 sm:p-6 flex items-start gap-4 sm:gap-5 border border-white/70 dark:border-gray-800">
+		<div class="mb-6">
+			<div class="max-w-2xl mx-auto bg-gray-800 rounded-xl shadow-lg p-6 space-y-4 border border-gray-700">
 
 				<!-- Icon -->
-				<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 flex-shrink-0 shadow-md -mt-11 sm:-mt-12 border-4 border-white dark:border-gray-900">
+				<div class="w-16 h-16 rounded-xl overflow-hidden bg-gray-900 flex-shrink-0 border border-gray-700">
 					<?php if ( $icon_src ) : ?>
 						<img src="<?php echo esc_url( $icon_src ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="w-full h-full object-cover" loading="eager">
 					<?php else : ?>
@@ -147,73 +164,45 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 				<div class="flex-1 min-w-0">
 					<div class="flex gap-1 mb-1 flex-wrap">
 						<?php if ( $is_mod ) : ?>
-							<span class="badge-mod px-2 py-0.5 rounded-full text-[10px] font-bold text-white"><?php esc_html_e( 'MOD', 'aspv5' ); ?></span>
+							<span class="bg-green-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold"><?php esc_html_e( 'PREMIUM', 'aspv5' ); ?></span>
 						<?php endif; ?>
-						<span class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[10px] font-semibold px-2 py-0.5 rounded-full"><?php echo esc_html( $post_type_label ); ?></span>
+						<span class="bg-orange-500 text-white px-2 py-0.5 rounded-full text-xs font-semibold"><?php esc_html_e( 'Editor\'s Choice', 'aspv5' ); ?></span>
 					</div>
-					<h1 class="text-xl font-bold text-gray-900 dark:text-white leading-tight mb-1">
+					<h2 class="text-xl font-bold text-white leading-tight mb-1">
 						<?php echo esc_html( get_the_title() ); ?>
-					</h1>
+					</h2>
 					<?php if ( $developer ) : ?>
-						<p class="text-sm text-gray-500 dark:text-gray-400"><?php echo esc_html( $developer ); ?></p>
+						<p class="text-green-400 text-sm"><?php echo esc_html( $developer ); ?></p>
 					<?php endif; ?>
 
-					<!-- Pills -->
-					<div class="flex flex-wrap gap-2 mt-2">
-						<?php if ( $rating ) : ?>
-							<span class="inline-flex items-center gap-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 text-xs font-bold px-2.5 py-1 rounded-full">
-								★ <?php echo esc_html( $rating ); ?>
-							</span>
-						<?php endif; ?>
-						<?php if ( $cat_name && $cat_link ) : ?>
-							<a href="<?php echo esc_url( $cat_link ); ?>" class="inline-flex items-center bg-[color:var(--asp-primary)]/10 text-[color:var(--asp-primary)] text-xs font-semibold px-2.5 py-1 rounded-full hover:bg-[color:var(--asp-primary)]/20 transition-colors">
-								<?php echo esc_html( $cat_name ); ?>
-							</a>
-						<?php endif; ?>
-						<?php if ( $size ) : ?>
-							<span class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-medium px-2.5 py-1 rounded-full"><?php echo esc_html( $size ); ?></span>
-						<?php endif; ?>
-						<?php if ( $downloads ) : ?>
-							<span class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
-								<i class="bx bx-download text-sm"></i><?php echo esc_html( $downloads ); ?>
-							</span>
-						<?php endif; ?>
-						<?php if ( $android_ver ) : ?>
-							<span class="bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 text-xs font-medium px-2.5 py-1 rounded-full">
-								Android <?php echo esc_html( $android_ver ); ?>+
-							</span>
-						<?php endif; ?>
-					</div>
+					<?php if ( $mod_info ) : ?>
+						<p class="text-orange-400 italic text-sm mt-2"><?php echo esc_html( $mod_info ); ?></p>
+					<?php endif; ?>
 
-					<?php if ( $quick_stats ) : ?>
-						<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4">
-							<?php foreach ( $quick_stats as $label => $value ) : ?>
-								<div class="sa-stat-chip rounded-2xl px-3 py-2">
-									<div class="text-[10px] uppercase tracking-wide text-gray-500 dark:text-gray-400"><?php echo esc_html( $label ); ?></div>
-									<div class="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate"><?php echo esc_html( $value ); ?></div>
-								</div>
-							<?php endforeach; ?>
-						</div>
+					<?php if ( $short_summary ) : ?>
+						<p class="text-gray-300 text-sm mt-1"><?php echo esc_html( $short_summary ); ?></p>
 					<?php endif; ?>
 
 					<!-- CTA Buttons -->
-					<div class="flex gap-3 mt-4 flex-wrap">
+					<div class="mt-4">
 						<?php if ( $download_url ) : ?>
 							<a href="<?php echo esc_url( $download_url ); ?>"
-							   class="flex-1 min-w-[210px] inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-3.5 rounded-2xl text-base transition-colors shadow-lg shadow-emerald-700/30"
+							   class="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"
 							   rel="nofollow noopener" target="_blank">
 								<i class="bx bxs-download text-base"></i>
 								<?php esc_html_e( 'Download APK', 'aspv5' ); ?>
-								<?php if ( $size ) : ?>
-									<span class="opacity-75 text-xs font-normal"><?php echo esc_html( $size ); ?></span>
-								<?php endif; ?>
 							</a>
 						<?php endif; ?>
-						<button class="w-10 h-10 flex items-center justify-center rounded-2xl border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary dark:hover:border-primary dark:hover:text-primary transition-colors"
-						        id="sa-share-btn"
-						        aria-label="<?php esc_attr_e( 'Share', 'aspv5' ); ?>">
-							<i class="bx bx-share-alt text-lg"></i>
-						</button>
+						<div class="flex items-center justify-between mt-4 text-sm text-gray-400">
+							<button class="inline-flex items-center gap-1 hover:text-white" id="sa-share-btn" aria-label="<?php esc_attr_e( 'Share', 'aspv5' ); ?>">
+								<i class="bx bx-share-alt text-base"></i>
+								<span><?php esc_html_e( 'Share', 'aspv5' ); ?></span>
+							</button>
+							<a href="#" class="inline-flex items-center gap-1 hover:text-white" rel="nofollow">
+								<i class="bx bx-plus text-base"></i>
+								<span><?php esc_html_e( 'Request Update', 'aspv5' ); ?></span>
+							</a>
+						</div>
 					</div>
 
 					<?php if ( $extra_downloads ) : ?>
@@ -289,40 +278,45 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 	</section>
 	<?php endif; ?>
 
-	<!-- ── App Details Table ── -->
+	<!-- ── Info Bar ── -->
 	<section class="mb-6 aspv5-reveal">
 		<div class="max-w-6xl mx-auto px-4">
-			<h2 class="text-base font-bold text-gray-800 dark:text-gray-200 mb-3"><?php esc_html_e( 'App Details', 'aspv5' ); ?></h2>
-			<div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800">
-				<?php
-				$details = array_filter( [
-					__( 'Version', 'aspv5' )          => $version,
-					__( 'Size', 'aspv5' )             => $size,
-					__( 'Developer', 'aspv5' )        => $developer,
-					__( 'Downloads', 'aspv5' )        => $downloads,
-					__( 'Requires Android', 'aspv5' ) => $android_ver ? $android_ver . '+' : '',
-					__( 'Category', 'aspv5' )         => $cat_name,
-					__( 'Updated', 'aspv5' )          => get_the_modified_date(),
-				] );
-				foreach ( $details as $key => $value ) : ?>
-					<div class="flex items-center justify-between px-4 py-3">
-						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium"><?php echo esc_html( $key ); ?></span>
-						<span class="text-sm text-gray-800 dark:text-gray-200 font-semibold text-right">
-							<?php if ( $key === __( 'Category', 'aspv5' ) && $cat_link ) : ?>
-								<a href="<?php echo esc_url( $cat_link ); ?>" class="text-primary hover:underline"><?php echo esc_html( $value ); ?></a>
-							<?php else : ?>
-								<?php echo esc_html( $value ); ?>
-							<?php endif; ?>
-						</span>
-					</div>
-				<?php endforeach; ?>
-
-				<?php if ( $is_mod && $mod_info ) : ?>
-					<div class="flex items-center justify-between px-4 py-3">
-						<span class="text-xs text-gray-500 dark:text-gray-400 font-medium"><?php esc_html_e( 'MOD Features', 'aspv5' ); ?></span>
-						<span class="text-sm text-[color:var(--asp-primary)] font-semibold text-right"><?php echo esc_html( $mod_info ); ?></span>
-					</div>
-				<?php endif; ?>
+			<div class="info-bar-scroll">
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'VERSION', 'aspv5' ); ?></div>
+					<div class="info-bar-value"><?php echo esc_html( $version ?: '-' ); ?></div>
+					<div class="info-bar-sub"><?php esc_html_e( 'Latest', 'aspv5' ); ?></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'SIZE', 'aspv5' ); ?></div>
+					<div class="info-bar-value"><?php echo esc_html( $size ?: '-' ); ?></div>
+					<div class="info-bar-sub"><?php esc_html_e( 'Total', 'aspv5' ); ?></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'GENRE', 'aspv5' ); ?></div>
+					<div class="info-bar-icon"><i class="bx bx-category"></i></div>
+					<div class="info-bar-sub"><?php if ( $cat_name && $cat_link ) : ?><a class="text-primary font-medium" href="<?php echo esc_url( $cat_link ); ?>"><?php echo esc_html( $cat_name ); ?></a><?php else : ?>-<?php endif; ?></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'DEVELOPER', 'aspv5' ); ?></div>
+					<div class="info-bar-icon"><i class="bx bx-user"></i></div>
+					<div class="info-bar-sub"><span class="text-primary font-medium"><?php echo esc_html( $developer ?: '-' ); ?></span></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'REACHED', 'aspv5' ); ?></div>
+					<div class="info-bar-value"><?php echo esc_html( $downloads ?: '-' ); ?></div>
+					<div class="info-bar-sub"><?php esc_html_e( 'Views', 'aspv5' ); ?></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'UPDATED', 'aspv5' ); ?></div>
+					<div class="info-bar-value info-bar-value--sm"><?php echo esc_html( get_the_modified_date( 'M j' ) ); ?></div>
+					<div class="info-bar-sub"><?php echo esc_html( get_the_modified_date( 'Y' ) ); ?></div>
+				</div>
+				<div class="info-bar-item">
+					<div class="info-bar-label"><?php esc_html_e( 'RATING', 'aspv5' ); ?></div>
+					<div class="info-bar-value"><?php echo esc_html( $rating ? $rating . ' ★' : '-' ); ?></div>
+					<div class="info-bar-sub"><?php esc_html_e( 'Score', 'aspv5' ); ?></div>
+				</div>
 			</div>
 		</div>
 	</section>

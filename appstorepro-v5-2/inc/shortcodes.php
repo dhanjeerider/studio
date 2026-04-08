@@ -5,6 +5,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Prefer the new category image meta key and fallback gracefully.
+function aspv5_shortcode_category_image_url( $term_id, $size = 'medium' ) {
+	$image_id = absint( get_term_meta( $term_id, '_aspv5_category_image', true ) );
+	if ( $image_id ) {
+		$url = wp_get_attachment_image_url( $image_id, $size );
+		if ( $url ) {
+			return $url;
+		}
+	}
+
+	if ( function_exists( 'aspv5_get_category_image' ) ) {
+		return aspv5_get_category_image( $term_id, $size );
+	}
+
+	return '';
+}
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // BROWSE PAGE SHORTCODE
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -31,7 +48,7 @@ function aspv5_shortcode_browse( $atts ) {
 	?>
 	<div class="aspv5-browse-wrapper">
 		<!-- Hero Section -->
-		<section class="browse-hero py-12 bg-gradient-to-b from-blue-50 to-white mb-10">
+		<section class="py-12 bg-gradient-to-b from-slate-50 to-white mb-10">
 			<div class="max-w-6xl mx-auto px-4">
 				<div class="text-center mb-8">
 					<p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-orange mb-4">
@@ -47,7 +64,7 @@ function aspv5_shortcode_browse( $atts ) {
 				</div>
 
 				<!-- Search Form -->
-				<form id="aspv5-browse-form" class="bg-white rounded-2xl shadow-lg p-8">
+				<form id="aspv5-browse-form" class="bg-white rounded-2xl shadow-lg p-6 sm:p-8 border border-gray-100">
 					<!-- Search Bar -->
 					<div class="mb-6">
 						<div class="relative">
@@ -57,8 +74,8 @@ function aspv5_shortcode_browse( $atts ) {
 								placeholder="Search for apps, games..." 
 								class="w-full rounded-full border border-gray-200 px-6 py-4 text-gray-900 outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
 							>
-							<button type="submit" class="absolute inset-y-0 right-2 flex items-center pr-4 text-orange hover:text-orange-hover">
-								<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M765-144 526-383q-30 22-65.79 34.5-35.79 12.5-76.18 12.5Q284-336 214-406t-70-170q0-100 70-170t170-70q100 0 170 70t70 170.03q0 40.39-12.5 76.18Q599-464 577-434l239 239-51 51ZM384-408q70 0 119-49t49-119q0-70-49-119t-119-49q-70 0-119 49t-49 119q0 70 49 119t119 49Z"></path></svg>
+							<button type="submit" class="absolute inset-y-0 right-2 flex items-center pr-4 text-orange hover:text-orange-hover" aria-label="Search">
+								<i class="bx bx-search text-xl"></i>
 							</button>
 						</div>
 					</div>
@@ -121,101 +138,6 @@ function aspv5_shortcode_browse( $atts ) {
 			<div id="browse-pagination" class="mt-8 text-center"></div>
 		</section>
 	</div>
-
-	<style>
-		.browse-hero {
-			background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-		}
-		
-		.aspv5-browse-wrapper {
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-		}
-
-		.game-card {
-			background: white;
-			border-radius: 16px;
-			overflow: hidden;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-			transition: all 0.3s ease;
-		}
-
-		.game-card:hover {
-			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-			transform: translateY(-4px);
-		}
-
-		.game-thumb {
-			aspect-ratio: 1;
-			overflow: hidden;
-			background: #f3f4f6;
-		}
-
-		.game-thumb img {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 0.3s ease;
-		}
-
-		.game-card:hover .game-thumb img {
-			transform: scale(1.05);
-		}
-
-		.game-content {
-			padding: 16px;
-		}
-
-		.game-title {
-			font-weight: 600;
-			color: #1f2937;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-
-		.game-meta {
-			font-size: 12px;
-			color: #6b7280;
-			margin-top: 8px;
-		}
-
-		.game-rating {
-			color: #f59e0b;
-			font-weight: 600;
-		}
-
-		.game-badge {
-			display: inline-block;
-			background: #ff6b35;
-			color: white;
-			padding: 4px 12px;
-			border-radius: 20px;
-			font-size: 10px;
-			font-weight: 700;
-			margin-right: 8px;
-		}
-
-		.game-download-btn {
-			display: block;
-			width: 100%;
-			padding: 12px;
-			margin-top: 12px;
-			background: linear-gradient(135deg, #ff6b35 0%, #f27c2f 100%);
-			color: white;
-			border: none;
-			border-radius: 10px;
-			font-weight: 600;
-			cursor: pointer;
-			transition: all 0.3s ease;
-			text-align: center;
-			text-decoration: none;
-		}
-
-		.game-download-btn:hover {
-			background: linear-gradient(135deg, #f27c2f 0%, #e66f28 100%);
-			transform: scale(1.02);
-		}
-	</style>
 
 	<script>
 		(function ($) {
@@ -349,29 +271,32 @@ function aspv5_render_app_card() {
 	}
 
 	?>
-	<article class="game-card">
+	<article class="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
 		<?php if ( $mod_info ) : ?>
-			<div style="position: absolute; top: 12px; left: 12px; z-index: 1;">
-				<span class="game-badge">MOD</span>
+			<div class="absolute top-3 left-3 z-10">
+				<span class="inline-flex items-center gap-1 bg-orange text-white px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide">
+					<i class="bx bxs-bolt text-xs"></i>MOD
+				</span>
 			</div>
 		<?php endif; ?>
 
-		<a href="<?php the_permalink(); ?>" class="game-thumb">
+		<a href="<?php the_permalink(); ?>" class="block aspect-square overflow-hidden bg-gray-100">
 			<?php if ( $icon ) : ?>
-				<img src="<?php echo esc_url( $icon ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy">
+				<img src="<?php echo esc_url( $icon ); ?>" alt="<?php the_title_attribute(); ?>" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
 			<?php else : ?>
-				<div style="display: flex; align-items: center; justify-content: center; background: #e5e7eb; color: #6b7280; font-size: 48px; font-weight: bold;">
+				<div class="w-full h-full flex items-center justify-center bg-gray-200 text-gray-500 text-4xl font-bold">
 					<?php echo strtoupper( substr( get_the_title(), 0, 1 ) ); ?>
 				</div>
 			<?php endif; ?>
 		</a>
 
-		<div class="game-content">
-			<a href="<?php the_permalink(); ?>" class="game-title"><?php the_title(); ?></a>
+		<div class="p-4">
+			<a href="<?php the_permalink(); ?>" class="block text-sm font-semibold text-gray-900 truncate hover:text-orange transition-colors"><?php the_title(); ?></a>
 
-			<div class="game-meta">
+			<div class="text-xs text-gray-500 mt-2">
 				<?php if ( $version || $size ) : ?>
-					<div>
+					<div class="inline-flex items-center gap-1.5">
+						<i class="bx bx-package text-sm"></i>
 						<?php if ( $version ) echo esc_html( $version ); ?>
 						<?php if ( $version && $size ) echo ' • '; ?>
 						<?php if ( $size ) echo esc_html( $size ); ?>
@@ -379,21 +304,22 @@ function aspv5_render_app_card() {
 				<?php endif; ?>
 			</div>
 
-			<div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+			<div class="flex items-center gap-2 mt-3 text-xs">
 				<?php if ( $rating ) : ?>
-					<span class="game-rating">★ <?php echo esc_html( $rating ); ?></span>
+					<span class="inline-flex items-center gap-1 text-amber-600 font-semibold"><i class="bx bxs-star"></i><?php echo esc_html( $rating ); ?></span>
 				<?php endif; ?>
 
 				<?php if ( ! empty( $categories ) ) : ?>
-					<span style="font-size: 12px; color: #6b7280;">
+					<span class="inline-flex items-center gap-1 text-gray-500">
+						<i class="bx bx-category-alt"></i>
 						<?php echo esc_html( $categories[0]->name ); ?>
 					</span>
 				<?php endif; ?>
 			</div>
 
-			<a href="<?php the_permalink(); ?>" class="game-download-btn">
-				<svg class="w-5 h-5" style="display: inline; margin-right: 6px;" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 -960 960 960"><path d="M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z"></path></svg>
-				Download
+			<a href="<?php the_permalink(); ?>" class="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-orange text-white text-sm font-semibold py-2.5 hover:opacity-90 transition-opacity">
+				<i class="bx bx-download text-base"></i>
+				<span><?php esc_html_e( 'Open', 'aspv5' ); ?></span>
 			</a>
 		</div>
 	</article>
@@ -426,6 +352,15 @@ function aspv5_shortcode_categories( $atts ) {
 		'show_count' => 'yes',
 	], $atts, 'aspv5_categories' );
 
+	$columns = max( 1, min( 4, absint( $atts['columns'] ) ) );
+	$grid_map = [
+		1 => 'grid-cols-1',
+		2 => 'grid-cols-1 sm:grid-cols-2',
+		3 => 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+		4 => 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
+	];
+	$grid_class = isset( $grid_map[ $columns ] ) ? $grid_map[ $columns ] : $grid_map[3];
+
 	ob_start();
 
 	$categories = get_terms( [
@@ -439,118 +374,34 @@ function aspv5_shortcode_categories( $atts ) {
 	}
 
 	?>
-	<div class="aspv5-categories-wrapper">
-		<div class="categories-grid" style="display: grid; grid-template-columns: repeat(<?php echo (int) $atts['columns']; ?>, 1fr); gap: 24px; margin: 40px 0;">
+	<div class="aspv5-categories-wrapper my-10">
+		<div class="grid <?php echo esc_attr( $grid_class ); ?> gap-5">
 			<?php foreach ( $categories as $category ) : ?>
 				<?php
-				$image_url = aspv5_get_category_image( $category->term_id, 'medium' );
+				$image_url = aspv5_shortcode_category_image_url( $category->term_id, 'medium' );
 				$link      = get_term_link( $category );
 				$count     = $category->count;
 				?>
-				<a href="<?php echo esc_url( $link ); ?>" class="category-card">
-					<div class="category-image-wrap">
+				<a href="<?php echo esc_url( $link ); ?>" class="group block rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
+					<div class="relative w-full aspect-square overflow-hidden bg-gray-100">
 						<?php if ( $image_url ) : ?>
-							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category->name ); ?>" loading="lazy">
+							<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $category->name ); ?>" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
 						<?php else : ?>
-							<div class="category-placeholder">
-								<svg class="w-16 h-16" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor"><path d="M480-336 288-528l51-51 105 105v-342h72v342l105-105 51 51-192 192ZM263.72-192Q234-192 213-213.15T192-264v-72h72v72h432v-72h72v72q0 29.7-21.16 50.85Q725.68-192 695.96-192H263.72Z"></path></svg>
+							<div class="absolute inset-0 w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300 text-gray-500">
+								<i class="bx bx-category text-5xl"></i>
 							</div>
 						<?php endif; ?>
 					</div>
-					<div class="category-info">
-						<h3><?php echo esc_html( $category->name ); ?></h3>
+					<div class="p-4 text-center">
+						<h3 class="text-base font-semibold text-gray-900"><?php echo esc_html( $category->name ); ?></h3>
 						<?php if ( 'yes' === $atts['show_count'] ) : ?>
-							<p><?php printf( _n( '%d app', '%d apps', $count, 'aspv5' ), $count ); ?></p>
+							<p class="text-sm text-gray-500 mt-1 inline-flex items-center gap-1"><i class="bx bx-grid-alt"></i><?php printf( _n( '%d app', '%d apps', $count, 'aspv5' ), $count ); ?></p>
 						<?php endif; ?>
 					</div>
 				</a>
 			<?php endforeach; ?>
 		</div>
 	</div>
-
-	<style>
-		.category-card {
-			display: block;
-			text-decoration: none;
-			border-radius: 16px;
-			overflow: hidden;
-			background: white;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-			transition: all 0.3s ease;
-			height: 100%;
-		}
-
-		.category-card:hover {
-			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-			transform: translateY(-4px);
-		}
-
-		.category-image-wrap {
-			position: relative;
-			width: 100%;
-			padding-bottom: 100%;
-			overflow: hidden;
-			background: #f3f4f6;
-		}
-
-		.category-image-wrap img {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			transition: transform 0.3s ease;
-		}
-
-		.category-card:hover .category-image-wrap img {
-			transform: scale(1.1);
-		}
-
-		.category-placeholder {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
-			color: #9ca3af;
-		}
-
-		.category-info {
-			padding: 20px;
-			text-align: center;
-		}
-
-		.category-info h3 {
-			margin: 0 0 8px 0;
-			font-size: 18px;
-			font-weight: 600;
-			color: #1f2937;
-		}
-
-		.category-info p {
-			margin: 0;
-			font-size: 14px;
-			color: #6b7280;
-		}
-
-		@media (max-width: 768px) {
-			.categories-grid {
-				grid-template-columns: repeat(2, 1fr);
-				gap: 16px;
-			}
-		}
-
-		@media (max-width: 480px) {
-			.categories-grid {
-				grid-template-columns: 1fr;
-			}
-		}
-	</style>
 
 	<?php
 	return ob_get_clean();
@@ -618,7 +469,7 @@ function aspv5_shortcode_home_hero( $atts ) {
 									<?php if ( $icon ) : ?>
 										<img src="<?php echo esc_url( $icon ); ?>" alt="<?php the_title_attribute(); ?>" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
 									<?php else : ?>
-										<div style="width: 100%; height: 100%; background: #e5e7eb; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; color: #9ca3af;">
+										<div class="w-full h-full bg-gray-200 flex items-center justify-center text-5xl font-bold text-gray-400">
 											<?php echo strtoupper( substr( get_the_title(), 0, 1 ) ); ?>
 										</div>
 									<?php endif; ?>
@@ -642,31 +493,6 @@ function aspv5_shortcode_home_hero( $atts ) {
 			<?php endif; ?>
 		</div>
 	</section>
-
-	<style>
-		.featured-carousel {
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-		}
-
-		.featured-carousel h2 {
-			margin: 0;
-		}
-
-		.featured-carousel .snap-x {
-			scroll-behavior: smooth;
-		}
-
-		/* Hide scrollbar for Chrome, Safari and Opera */
-		.featured-carousel .overflow-x-auto::-webkit-scrollbar {
-			display: none;
-		}
-
-		/* Hide scrollbar for IE, Edge and Firefox */
-		.featured-carousel .overflow-x-auto {
-			-ms-overflow-style: none;
-			scrollbar-width: none;
-		}
-	</style>
 
 	<?php
 	return ob_get_clean();
@@ -711,7 +537,7 @@ function aspv5_shortcode_home_collections( $atts ) {
 				] );
 
 				foreach ( $categories as $category ) :
-					$image_url = aspv5_get_category_image( $category->term_id, 'large' );
+					$image_url = aspv5_shortcode_category_image_url( $category->term_id, 'large' );
 					$link      = get_term_link( $category );
 					?>
 					<a href="<?php echo esc_url( $link ); ?>" class="collection-card relative rounded-2xl overflow-hidden aspect-square group cursor-pointer no-underline text-dark">
@@ -736,17 +562,6 @@ function aspv5_shortcode_home_collections( $atts ) {
 			</div>
 		</div>
 	</section>
-
-	<style>
-		.collection-card {
-			display: block;
-			text-decoration: none;
-		}
-
-		.collection-card:hover {
-			text-decoration: none;
-		}
-	</style>
 
 	<?php
 	return ob_get_clean();

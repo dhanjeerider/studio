@@ -160,6 +160,57 @@ body { overflow-x: hidden; }
   transform: rotate(180deg);
 }
 
+/* ── Single info bar ───────────────────────────────────────────────────── */
+.info-bar-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  scrollbar-width: none;
+}
+.info-bar-scroll::-webkit-scrollbar {
+  display: none;
+}
+.info-bar-item {
+  min-width: 150px;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  padding: 12px;
+  color: #d1d5db;
+  flex: 0 0 auto;
+}
+.info-bar-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+.info-bar-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f3f4f6;
+  line-height: 1.2;
+}
+.info-bar-value--sm {
+  font-size: 14px;
+}
+.info-bar-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #9ca3af;
+}
+.info-bar-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
 /* ── Reveal animation ───────────────────────────────────────────────────── */
 .aspv5-reveal {
   opacity: 0;
