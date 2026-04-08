@@ -93,10 +93,12 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'pb-20 sa-single-shell bg-gray-900 text-gray-200' ); ?>>
 
 	<!-- ── Hero Banner ── -->
-	<?php if ( $hero_img || $screenshots ) : ?>
+	<?php
+	$hero_src = $hero_img ?: ( ! empty( $screenshots ) ? $screenshots[0] : '' );
+	?>
+	<?php if ( $hero_src ) : ?>
 	<div class="relative bg-gray-900 overflow-hidden"
 	     style="height: clamp(140px, 28vw, 280px);">
-		<?php $hero_src = $hero_img ?: reset( $screenshots ); ?>
 		<img src="<?php echo esc_url( $hero_src ); ?>"
 		     alt="<?php echo esc_attr( get_the_title() ); ?>"
 		     class="absolute inset-0 w-full h-full object-cover opacity-50"
@@ -259,14 +261,14 @@ $post_ad_code    = get_theme_mod( 'aspv5_ad_post', '' );
 	<!-- ── Info Bar ── -->
 	<?php
 	$info_items = [];
-	if ( $version )  $info_items[] = [ 'label' => __( 'VERSION', 'aspv5' ), 'value' => $version, 'sub' => __( 'Latest', 'aspv5' ) ];
-	if ( $size )     $info_items[] = [ 'label' => __( 'SIZE', 'aspv5' ), 'value' => $size, 'sub' => __( 'Total', 'aspv5' ) ];
+	if ( $version )     $info_items[] = [ 'label' => __( 'VERSION', 'aspv5' ), 'value' => $version, 'sub' => __( 'Latest', 'aspv5' ) ];
+	if ( $size )        $info_items[] = [ 'label' => __( 'SIZE', 'aspv5' ), 'value' => $size, 'sub' => __( 'Total', 'aspv5' ) ];
 	if ( $android_ver ) $info_items[] = [ 'label' => __( 'ANDROID', 'aspv5' ), 'value' => $android_ver . '+', 'sub' => __( 'Required', 'aspv5' ) ];
-	if ( $rating )   $info_items[] = [ 'label' => __( 'RATING', 'aspv5' ), 'value' => $rating . ' ★', 'sub' => __( 'Score', 'aspv5' ) ];
-	if ( $downloads ) $info_items[] = [ 'label' => __( 'REACHED', 'aspv5' ), 'value' => $downloads, 'sub' => __( 'Views', 'aspv5' ) ];
-	if ( $cat_name ) $info_items[] = [ 'label' => __( 'GENRE', 'aspv5' ), 'value' => $cat_name, 'sub' => '', 'link' => $cat_link ?? '' ];
-	if ( $developer ) $info_items[] = [ 'label' => __( 'DEVELOPER', 'aspv5' ), 'value' => $developer, 'sub' => '' ];
-	$info_items[] = [ 'label' => __( 'UPDATED', 'aspv5' ), 'value' => get_the_modified_date( 'M j' ), 'sub' => get_the_modified_date( 'Y' ) ];
+	if ( $rating )      $info_items[] = [ 'label' => __( 'RATING', 'aspv5' ), 'value' => $rating . ' ★', 'sub' => __( 'Score', 'aspv5' ) ];
+	if ( $downloads )   $info_items[] = [ 'label' => __( 'REACHED', 'aspv5' ), 'value' => $downloads, 'sub' => __( 'Views', 'aspv5' ) ];
+	if ( $cat_name )    $info_items[] = [ 'label' => __( 'GENRE', 'aspv5' ), 'value' => $cat_name, 'sub' => '', 'link' => $cat_link ?? '' ];
+	if ( $developer )   $info_items[] = [ 'label' => __( 'DEVELOPER', 'aspv5' ), 'value' => $developer, 'sub' => '' ];
+	$info_items[]   = [ 'label' => __( 'UPDATED', 'aspv5' ), 'value' => get_the_modified_date( 'M j' ), 'sub' => get_the_modified_date( 'Y' ) ];
 	?>
 	<?php if ( $info_items ) : ?>
 	<section class="mb-4 aspv5-reveal">

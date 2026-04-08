@@ -397,7 +397,7 @@ function aspv5_fetch_with_proxy( $url, $args = [] ) {
 		$needs_proxy = true;
 	} else {
 		$code = (int) wp_remote_retrieve_response_code( $response );
-		if ( in_array( $code, [ 403, 429, 503, 0 ], true ) ) {
+		if ( in_array( $code, [ 403, 429, 503 ], true ) ) {
 			$needs_proxy = true;
 		}
 	}

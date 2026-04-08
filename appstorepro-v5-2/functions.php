@@ -96,7 +96,12 @@ function aspv5_archive_posts_per_page( $query ) {
 		return;
 	}
 	if ( $query->is_post_type_archive( [ 'app', 'game' ] ) || $query->is_tax( 'app-category' ) || $query->is_search() ) {
-		if ( ! $query->get( 'posts_per_page' ) || (int) $query->get( 'posts_per_page' ) < 2 ) {
+		$ppp = (int) $query->get( 'posts_per_page' );
+		// Only override when the setting is a small positive number (e.g. 1).
+		// Leave -1 (show all) and 0 (unset/default) unchanged; WordPress handles 0
+		// as "use the reading settings default". We only intervene when the setting
+		// is explicitly 1 (the common culprit for "only 1 post showing").
+		if ( $ppp > 0 && $ppp < 2 ) {
 			$query->set( 'posts_per_page', 20 );
 		}
 	}
